@@ -1,4 +1,4 @@
-package tw.com.tp6gl4cj86.android_http_tool;
+package tw.com.tp6gl4cj86.android_http_tool.Listener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,7 +8,7 @@ import org.json.JSONObject;
  */
 public interface HttpListener
 {
-    void onSuccess(JSONObject data) throws JSONException;
+    void onSuccess(JSONObject data, String log) throws JSONException;
 
     void onFailure(String errorStr);
 }

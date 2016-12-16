@@ -12,14 +12,15 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import tw.com.tp6gl4cj86.android_http_tool.Listener.HttpListener;
+import tw.com.tp6gl4cj86.android_http_tool.Listener.HttpListenerAdapter;
+
 
 /**
  * Created by tp6gl4cj86 on 2016/6/14.
  */
 public class HttpTool
 {
-
-    private static final String TAG = "HttpTool";
 
     private static HttpListenerAdapter mStaticHttpListenerAdapter;
 
@@ -56,14 +57,16 @@ public class HttpTool
                     {
                         try
                         {
+                            final String log = "Url : " + Url + "\nparams : " + (params != null ? params.toString() : "") + "\nResponse : " + response.toString();
+
                             if (httpListener != null)
                             {
-                                httpListener.onSuccess(response);
+                                httpListener.onSuccess(response, log);
                             }
 
                             if (mStaticHttpListenerAdapter != null)
                             {
-                                mStaticHttpListenerAdapter.onSuccess(response);
+                                mStaticHttpListenerAdapter.onSuccess(response, log);
                             }
                         }
                         catch (Exception e)
