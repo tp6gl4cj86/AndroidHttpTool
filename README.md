@@ -24,7 +24,7 @@ dependencies {
 3. HttpTool.post(activity, Url, httpListener)
 4. HttpTool.post(activity, Url, params, httpListener)
 ```
-# params
+# Params
 ```java
 Map<String, String> params = new HashMap<>();
 params.put("key", "value");
