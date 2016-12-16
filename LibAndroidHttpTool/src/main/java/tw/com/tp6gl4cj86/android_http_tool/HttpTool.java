@@ -29,24 +29,24 @@ public class HttpTool
         HttpTool.mStaticHttpListenerAdapter = mStaticHttpListenerAdapter;
     }
 
-    public static void post(Activity activity, String Url)
+    public static void post(Activity activity, String url)
     {
-        post(activity, Url, new HashMap<String, String>(), null);
+        post(activity, url, new HashMap<String, String>(), null);
     }
 
-    public static void post(Activity activity, String Url, Map<String, String> params)
+    public static void post(Activity activity, String url, Map<String, String> params)
     {
-        post(activity, Url, params, null);
+        post(activity, url, params, null);
     }
 
-    public static void post(Activity activity, String Url, final HttpListener httpListener)
+    public static void post(Activity activity, String url, final HttpListener httpListener)
     {
-        post(activity, Url, new HashMap<String, String>(), httpListener);
+        post(activity, url, new HashMap<String, String>(), httpListener);
     }
 
-    public static void post(final Activity activity, final String Url, final Map<String, String> params, final HttpListener httpListener)
+    public static void post(final Activity activity, final String url, final Map<String, String> params, final HttpListener httpListener)
     {
-        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Url, null, new Response.Listener<JSONObject>()
+        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>()
         {
             @Override
             public void onResponse(JSONObject response)
@@ -57,7 +57,7 @@ public class HttpTool
                     {
                         try
                         {
-                            final String log = "Url : " + Url + "\nparams : " + (params != null ? params.toString() : "") + "\nResponse : " + response.toString();
+                            final String log = "url : " + url + "\nparams : " + (params != null ? params.toString() : "") + "\nResponse : " + response.toString();
 
                             if (httpListener != null)
                             {
