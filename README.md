@@ -16,11 +16,14 @@ dependencies {
 }
 ```
 
-Http Post
+# Http Post
+
+Map<String, String> params
+HttpListener httpListener
+
 ```java
-HttpTool.post(Activity activity, String Url)
-HttpTool.post(Activity activity, String Url, Map<String, String> params)
-HttpTool.post(Activity activity, String Url)
-HttpTool.post(Activity activity, String Url, final HttpListener httpListener)
-HttpTool.post(final Activity activity, final String Url, final Map<String, String> params, final HttpListener httpListener)
+HttpTool.post(activity, Url)
+HttpTool.post(activity, Url, params)
+HttpTool.post(activity, Url, httpListener)
+HttpTool.post(activity, Url, params, httpListener)
 ```
