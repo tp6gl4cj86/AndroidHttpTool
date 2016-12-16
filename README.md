@@ -19,11 +19,6 @@ dependencies {
 # Http Post func
 
 ```java
-1. HttpTool.post(activity, Url)
-2. HttpTool.post(activity, Url, params)
-3. HttpTool.post(activity, Url, httpListener)
-4. HttpTool.post(activity, Url, params, httpListener)
-
 // Params
 Map<String, String> params = new HashMap<>();
 params.put("key", "value");
@@ -44,4 +39,9 @@ HttpListenerAdapter httpListener = new HttpListenerAdapter()
         super.onFailure(errorStr);
     }
 };
+
+HttpTool.post(activity, url)
+HttpTool.post(activity, url, params)
+HttpTool.post(activity, url, httpListener)
+HttpTool.post(activity, url, params, httpListener)
 ```
