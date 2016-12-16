@@ -40,8 +40,8 @@ HttpListenerAdapter httpListener = new HttpListenerAdapter()
     }
 };
 
-1. HttpTool.post(activity, url)
-2. HttpTool.post(activity, url, params)
-3. HttpTool.post(activity, url, httpListener)
-4. HttpTool.post(activity, url, params, httpListener)
+1. HttpTool.post(activity, url);
+2. HttpTool.post(activity, url, params);
+3. HttpTool.post(activity, url, httpListener);
+4. HttpTool.post(activity, url, params, httpListener);
 ```
