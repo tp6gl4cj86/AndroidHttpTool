@@ -23,16 +23,13 @@ dependencies {
 2. HttpTool.post(activity, Url, params)
 3. HttpTool.post(activity, Url, httpListener)
 4. HttpTool.post(activity, Url, params, httpListener)
-```
-# Params
-```java
+
+// Params
 Map<String, String> params = new HashMap<>();
 params.put("key", "value");
 ...
-```
 
-# Request Call Back
-```java
+// Request Call Back
 HttpListenerAdapter httpListener = new HttpListenerAdapter()
 {
     @Override
