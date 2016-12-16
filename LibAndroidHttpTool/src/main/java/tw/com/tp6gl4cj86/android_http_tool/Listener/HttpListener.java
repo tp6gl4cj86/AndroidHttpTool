@@ -10,5 +10,7 @@ public interface HttpListener
 {
     void onSuccess(JSONObject data, String log) throws JSONException;
 
+    void onSuccess(String data, String log);
+
     void onFailure(String errorStr);
 }
