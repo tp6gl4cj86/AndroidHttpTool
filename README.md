@@ -16,9 +16,12 @@ dependencies {
 }
 ```
 
-# Http Post
+# Http Post func
 
 ```java
+Map<String, String> params = new HashMap<>();
+params.put("key", "value");
+
 1. HttpTool.post(activity, Url)
 2. HttpTool.post(activity, Url, params)
 3. HttpTool.post(activity, Url, httpListener)
