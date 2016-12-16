@@ -19,8 +19,8 @@ dependencies {
 # Http Post
 
 ```java
-HttpTool.post(activity, Url)
-HttpTool.post(activity, Url, params)
-HttpTool.post(activity, Url, httpListener)
-HttpTool.post(activity, Url, params, httpListener)
+1. HttpTool.post(activity, Url)
+2. HttpTool.post(activity, Url, params)
+3. HttpTool.post(activity, Url, httpListener)
+4. HttpTool.post(activity, Url, params, httpListener)
 ```
