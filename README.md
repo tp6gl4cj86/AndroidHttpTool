@@ -15,3 +15,12 @@ dependencies {
     compile 'tw.com.tp6gl4cj86:android_http_tool:2016.12.16.1'
 }
 ```
+
+Http Post
+```java
+HttpTool.post(Activity activity, String Url)
+HttpTool.post(Activity activity, String Url, Map<String, String> params)
+HttpTool.post(Activity activity, String Url)
+HttpTool.post(Activity activity, String Url, final HttpListener httpListener)
+HttpTool.post(final Activity activity, final String Url, final Map<String, String> params, final HttpListener httpListener)
+```
