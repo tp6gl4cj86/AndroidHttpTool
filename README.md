@@ -19,11 +19,32 @@ dependencies {
 # Http Post func
 
 ```java
-Map<String, String> params = new HashMap<>();
-params.put("key", "value");
-
 1. HttpTool.post(activity, Url)
 2. HttpTool.post(activity, Url, params)
 3. HttpTool.post(activity, Url, httpListener)
 4. HttpTool.post(activity, Url, params, httpListener)
+```
+# params
+```java
+Map<String, String> params = new HashMap<>();
+params.put("key", "value");
+...
+```
+
+# Request Call Back
+```java
+HttpListenerAdapter httpListener = new HttpListenerAdapter()
+{
+    @Override
+    public void onSuccess(JSONObject data, String log) throws JSONException
+    {
+        super.onSuccess(data, log);
+    }
+
+    @Override
+    public void onFailure(String errorStr)
+    {
+        super.onFailure(errorStr);
+    }
+};
 ```
