@@ -18,9 +18,6 @@ dependencies {
 
 # Http Post
 
-Map<String, String> params<br/>
-HttpListener httpListener
-
 ```java
 HttpTool.post(activity, Url)
 HttpTool.post(activity, Url, params)
