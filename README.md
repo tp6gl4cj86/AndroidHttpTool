@@ -2,7 +2,7 @@ AndroidHttpTool
 =========================
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[ ![Download](https://api.bintray.com/packages/tp6gl4cj86/maven/android_http_tool/images/download.svg?version=2016.12.16.2) ](https://bintray.com/tp6gl4cj86/maven/android_http_tool/2016.12.16.2/link)
+[ ![Download](https://api.bintray.com/packages/tp6gl4cj86/maven/android_http_tool/images/download.svg) ](https://bintray.com/tp6gl4cj86/maven/android_http_tool/_latestVersion)
 
 Http Request Tool use volley:1.0.0 + okhttp:3.4.2
 
@@ -12,7 +12,7 @@ Add dependency.
 
 ```
 dependencies {
-    compile 'tw.com.tp6gl4cj86:android_http_tool:2016.12.16.2'
+    compile 'tw.com.tp6gl4cj86:android_http_tool:2016.12.16.3'
 }
 ```
 
@@ -25,6 +25,7 @@ params.put("key", "value");
 ...
 
 // Request Call Back
+// default response JSONObject
 HttpListenerAdapter httpListener = new HttpListenerAdapter()
 {
     @Override
@@ -44,4 +45,35 @@ HttpListenerAdapter httpListener = new HttpListenerAdapter()
 2. HttpTool.post(activity, url, params);
 3. HttpTool.post(activity, url, httpListener);
 4. HttpTool.post(activity, url, params, httpListener);
+```
+
+# Http Get func
+
+```java
+// Params
+Map<String, String> params = new HashMap<>();
+params.put("key", "value");
+...
+
+// Request Call Back
+// default response String
+HttpListenerAdapter httpListener = new HttpListenerAdapter()
+{
+    @Override
+    public void onSuccess(String data, String log)
+    {
+        super.onSuccess(data, log);
+    }
+
+    @Override
+    public void onFailure(String errorStr)
+    {
+        super.onFailure(errorStr);
+    }
+};
+
+1. HttpTool.get(activity, url);
+2. HttpTool.get(activity, url, params);
+3. HttpTool.get(activity, url, httpListener);
+4. HttpTool.get(activity, url, params, httpListener);
 ```
