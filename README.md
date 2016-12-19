@@ -89,3 +89,9 @@ fileParams.put("key", HttpTool.getDataPart(new File("...", "mimeType")));
 
 HttpTool.post(activity, url, params, fileParams, httpListener);
 ```
+
+# DataPart Module
+```java
+TYPE_IMAGE = "image/jpeg"
+TYPE_THREEGPP = "video/3gpp"
+```
