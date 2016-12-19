@@ -77,11 +77,3 @@ HttpListenerAdapter httpListener = new HttpListenerAdapter()
 3. HttpTool.get(activity, url, httpListener);
 4. HttpTool.get(activity, url, params, httpListener);
 ```
-
-Change Log
-==========
-
-Version 2016.12.16.3
-----------------------------
-
- * 一般 Post、Get
