@@ -83,8 +83,7 @@ HttpListenerAdapter httpListener = new HttpListenerAdapter()
 // Params、httpListener same as Http Post func
 
 // FileParams for upload file
-// mimeType -> TYPE_IMAGE、TYPE_THREEGPP or custom
-final Map<String, DataPart> fileParams = new HashMap<>();
+Map<String, DataPart> fileParams = new HashMap<>();
 fileParams.put("key", HttpTool.getDataPart(new File("...", "mimeType")));
 ...
 
