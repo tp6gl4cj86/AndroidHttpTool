@@ -12,7 +12,7 @@ Add dependency.
 
 ```
 dependencies {
-    compile 'tw.com.tp6gl4cj86:android_http_tool:2016.12.16.3'
+    compile 'tw.com.tp6gl4cj86:android_http_tool:2016.12.19.1'
 }
 ```
 
@@ -76,4 +76,16 @@ HttpListenerAdapter httpListener = new HttpListenerAdapter()
 2. HttpTool.get(activity, url, params);
 3. HttpTool.get(activity, url, httpListener);
 4. HttpTool.get(activity, url, params, httpListener);
+```
+
+# Http Upload Post func
+```java
+// Params、httpListener same as Http Post func
+// FileParams for upload file
+// mimeType -> TYPE_IMAGE、TYPE_THREEGPP or custom
+final Map<String, DataPart> fileParams = new HashMap<>();
+fileParams.put("key", HttpTool.getDataPart(new File("...", "mimeType")));
+...
+
+HttpTool.get(activity, url, params, fileParams, httpListener);
 ```
