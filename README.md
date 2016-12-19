@@ -78,14 +78,15 @@ HttpListenerAdapter httpListener = new HttpListenerAdapter()
 4. HttpTool.get(activity, url, params, httpListener);
 ```
 
-# Http Upload Post func
+# Http Post func for upload file
 ```java
 // Params、httpListener same as Http Post func
+
 // FileParams for upload file
 // mimeType -> TYPE_IMAGE、TYPE_THREEGPP or custom
 final Map<String, DataPart> fileParams = new HashMap<>();
 fileParams.put("key", HttpTool.getDataPart(new File("...", "mimeType")));
 ...
 
-HttpTool.get(activity, url, params, fileParams, httpListener);
+HttpTool.post(activity, url, params, fileParams, httpListener);
 ```
