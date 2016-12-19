@@ -2,19 +2,26 @@ package tw.com.tp6gl4cj86.android_http_tool;
 
 import android.app.Activity;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
+import org.apache.commons.io.FileUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import tw.com.tp6gl4cj86.android_http_tool.Listener.HttpListener;
 import tw.com.tp6gl4cj86.android_http_tool.Listener.HttpListenerAdapter;
+import tw.com.tp6gl4cj86.android_http_tool.Request.DataPart;
+import tw.com.tp6gl4cj86.android_http_tool.Request.VolleyMultipartRequest;
 
 
 /**
@@ -50,6 +57,11 @@ public class HttpTool
         requestJSON(Request.Method.POST, activity, url, params, httpListener);
     }
 
+    public static void post(Activity activity, String url, Map<String, String> params, Map<String, DataPart> fileParams, HttpListener httpListener)
+    {
+        requestJSON(activity, url, params, fileParams, httpListener);
+    }
+
     public static void get(Activity activity, String url)
     {
         get(activity, url, new HashMap<String, String>(), null);
@@ -77,33 +89,9 @@ public class HttpTool
             @Override
             public void onResponse(String response)
             {
-                if (response != null)
-                {
-                    if (!activity.isFinishing())
-                    {
-                        final String log = "url : " + url + "\nparams : " + (params != null ? params.toString() : "") + "\nResponse : " + response;
-
-                        if (httpListener != null)
-                        {
-                            httpListener.onSuccess(response, log);
-                        }
-
-                        if (mStaticHttpListenerAdapter != null)
-                        {
-                            mStaticHttpListenerAdapter.onSuccess(response, log);
-                        }
-                    }
-                }
+                httpToolOnSuccessResponse(activity, getSuccessLog(url, params, response), httpListener, null, response);
             }
-        }, new Response.ErrorListener()
-        {
-
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                httpToolOnErrorResponse(error, activity, httpListener);
-            }
-        })
+        }, getErrorListener(activity, httpListener))
         {
             @Override
             protected Map<String, String> getParams()
@@ -123,40 +111,9 @@ public class HttpTool
             @Override
             public void onResponse(JSONObject response)
             {
-                if (response != null)
-                {
-                    if (!activity.isFinishing())
-                    {
-                        try
-                        {
-                            final String log = "url : " + url + "\nparams : " + (params != null ? params.toString() : "") + "\nResponse : " + response.toString();
-
-                            if (httpListener != null)
-                            {
-                                httpListener.onSuccess(response, log);
-                            }
-
-                            if (mStaticHttpListenerAdapter != null)
-                            {
-                                mStaticHttpListenerAdapter.onSuccess(response, log);
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }
-                }
+                httpToolOnSuccessResponse(activity, getSuccessLog(url, params, response.toString()), httpListener, response, null);
             }
-        }, new Response.ErrorListener()
-        {
-
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                httpToolOnErrorResponse(error, activity, httpListener);
-            }
-        })
+        }, getErrorListener(activity, httpListener))
         {
             @Override
             protected Map<String, String> getParams()
@@ -167,6 +124,97 @@ public class HttpTool
 
         VolleySingleton.getInstance(activity)
                        .addToRequestQueue(jsonObjectRequest);
+    }
+
+    public static void requestJSON(final Activity activity, final String url, final Map<String, String> params, final Map<String, DataPart> fileParams, final HttpListener httpListener)
+    {
+        final VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, url, new Response.Listener<NetworkResponse>()
+        {
+            @Override
+            public void onResponse(NetworkResponse response)
+            {
+                try
+                {
+                    final JSONObject json = new JSONObject(new String(response.data));
+
+                    httpToolOnSuccessResponse(activity, getSuccessLog(url, params, json.toString()), httpListener, json, null);
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }, getErrorListener(activity, httpListener))
+        {
+            @Override
+            protected Map<String, String> getParams()
+            {
+                return params;
+            }
+
+            @Override
+            protected Map<String, DataPart> getByteData()
+            {
+                return fileParams;
+            }
+        };
+
+        VolleySingleton.getInstance(activity)
+                       .addToRequestQueue(multipartRequest);
+    }
+
+    public static DataPart getDataPart(File file, String mimeType) throws IOException
+    {
+        return new DataPart(file.getAbsolutePath(), FileUtils.readFileToByteArray(file), mimeType);
+    }
+
+    private static String getSuccessLog(String url, Map<String, String> params, String response)
+    {
+        return "url : " + url + "\nparams : " + (params != null ? params.toString() : "") + "\nresponse : " + response;
+    }
+
+    private static void httpToolOnSuccessResponse(Activity activity, String log, HttpListener httpListener, JSONObject jsonResponse, String stringResponse)
+    {
+        if (jsonResponse != null || stringResponse != null)
+        {
+            if (!activity.isFinishing())
+            {
+                if (httpListener != null && jsonResponse != null)
+                {
+                    try
+                    {
+                        httpListener.onSuccess(jsonResponse, log);
+                    }
+                    catch (JSONException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (httpListener != null && stringResponse != null)
+                {
+                    httpListener.onSuccess(stringResponse, log);
+                }
+
+                if (mStaticHttpListenerAdapter != null)
+                {
+                    mStaticHttpListenerAdapter.onSuccess(stringResponse, log);
+                }
+            }
+        }
+    }
+
+    private static Response.ErrorListener getErrorListener(final Activity activity, final HttpListener httpListener)
+    {
+        return new Response.ErrorListener()
+        {
+
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                httpToolOnErrorResponse(error, activity, httpListener);
+            }
+        };
     }
 
     private static void httpToolOnErrorResponse(VolleyError error, Activity activity, HttpListener httpListener)
