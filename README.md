@@ -84,7 +84,7 @@ HttpListenerAdapter httpListener = new HttpListenerAdapter()
 
 // FileParams for upload file
 Map<String, DataPart> fileParams = new HashMap<>();
-fileParams.put("key", HttpTool.getDataPart(new File("...", "mimeType")));
+fileParams.put("key", HttpTool.getDataPart(new File("..."), "mimeType"));
 ...
 
 HttpTool.post(activity, url, params, fileParams, httpListener);
