@@ -3,7 +3,7 @@ Change Log
 
 Version 2017.01.08.1
 ----------------------------
- * Fix - Request by UTF-8
+ * Fix - Request preams by UTF-8
 
 Version 2016.12.19.1
 ----------------------------
