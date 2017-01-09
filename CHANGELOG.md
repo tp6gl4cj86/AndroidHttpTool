@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 2017.01.09.1
+----------------------------
+ * Fix - Error Message null issue
+
 Version 2017.01.08.1
 ----------------------------
  * Fix - Request params by UTF-8
