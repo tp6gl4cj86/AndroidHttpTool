@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 2017.01.08.1
+----------------------------
+ * Fix - Request params by UTF-8
+
 Version 2016.12.19.1
 ----------------------------
  * New - Post func for upload file
