@@ -122,6 +122,30 @@ public class VolleyMultipartRequest extends Request<NetworkResponse>
     @Override
     protected Response<NetworkResponse> parseNetworkResponse(NetworkResponse response)
     {
+        //        try
+        //        {
+        //            final String CONTENT_TYPE = "Content-Type";
+        //            final String TYPE_UTF8_CHARSET = "charset=UTF-8";
+        //            String type = response.headers.get(CONTENT_TYPE);
+        //            if (type == null)
+        //            {
+        //                Log.e("Oliss", "content type was null");
+        //                type = TYPE_UTF8_CHARSET;
+        //                response.headers.put(CONTENT_TYPE, type);
+        //            }
+        //            else if (!type.contains("UTF-8"))
+        //            {
+        //                Log.e("Oliss", "content type had UTF-8 missing");
+        //                type += ";" + TYPE_UTF8_CHARSET;
+        //                response.headers.put(CONTENT_TYPE, type);
+        //            }
+        //            return Response.success(response, HttpHeaderParser.parseCacheHeaders(response));
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            return Response.error(new ParseError(e));
+        //        }
+
         try
         {
             return Response.success(response, HttpHeaderParser.parseCacheHeaders(response));
@@ -196,7 +220,11 @@ public class VolleyMultipartRequest extends Request<NetworkResponse>
         dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"" + parameterName + "\"" + lineEnd);
         //dataOutputStream.writeBytes("Content-Type: text/plain; charset=UTF-8" + lineEnd);
         dataOutputStream.writeBytes(lineEnd);
-        dataOutputStream.writeBytes(parameterValue + lineEnd);
+
+        // fix request utf-8
+        //dataOutputStream.writeBytes(parameterValue + lineEnd);
+        dataOutputStream.write(parameterValue.getBytes("UTF-8"));
+        dataOutputStream.writeBytes(lineEnd);
     }
 
     /**

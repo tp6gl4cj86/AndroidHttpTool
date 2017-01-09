@@ -6,8 +6,6 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
@@ -21,6 +19,8 @@ import java.util.Map;
 import tw.com.tp6gl4cj86.android_http_tool.Listener.HttpListener;
 import tw.com.tp6gl4cj86.android_http_tool.Listener.HttpListenerAdapter;
 import tw.com.tp6gl4cj86.android_http_tool.Request.DataPart;
+import tw.com.tp6gl4cj86.android_http_tool.Request.UTF8_JsonObjectRequest;
+import tw.com.tp6gl4cj86.android_http_tool.Request.UTF8_StringRequest;
 import tw.com.tp6gl4cj86.android_http_tool.Request.VolleyMultipartRequest;
 
 
@@ -84,7 +84,7 @@ public class HttpTool
 
     public static void requestString(final int method, final Activity activity, final String url, final Map<String, String> params, final HttpListener httpListener)
     {
-        final StringRequest stringRequest = new StringRequest(method, url, new Response.Listener<String>()
+        final UTF8_StringRequest stringRequest = new UTF8_StringRequest(method, url, new Response.Listener<String>()
         {
             @Override
             public void onResponse(String response)
@@ -106,7 +106,7 @@ public class HttpTool
 
     public static void requestJSON(final int method, final Activity activity, final String url, final Map<String, String> params, final HttpListener httpListener)
     {
-        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(method, url, null, new Response.Listener<JSONObject>()
+        final UTF8_JsonObjectRequest jsonObjectRequest = new UTF8_JsonObjectRequest(method, url, null, new Response.Listener<JSONObject>()
         {
             @Override
             public void onResponse(JSONObject response)
@@ -221,7 +221,9 @@ public class HttpTool
     {
         if (!activity.isFinishing())
         {
-            final String errorStr = "VolleyError : " + error.getMessage() + "\nVolleyError body " + new String(error.networkResponse.data);
+            final String message = error != null ? error.getMessage() : "";
+            final String body = error != null && error.networkResponse != null && error.networkResponse.data != null ? new String(error.networkResponse.data) : "";
+            final String errorStr = "VolleyError : " + message + "\nVolleyError body : " + body;
 
             if (httpListener != null)
             {
