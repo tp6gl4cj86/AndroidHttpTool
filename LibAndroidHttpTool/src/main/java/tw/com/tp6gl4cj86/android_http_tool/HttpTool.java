@@ -79,27 +79,28 @@ public class HttpTool
 
     public static void get(Activity activity, String url, Map<String, String> params, HttpListener httpListener)
     {
-        requestString(Request.Method.GET, activity, url, params, httpListener);
+        requestGetString(activity, url, params, httpListener);
     }
 
-    public static void requestString(final int method, final Activity activity, final String url, final Map<String, String> params, final HttpListener httpListener)
+    public static void requestGetString(final Activity activity, final String url, final Map<String, String> params, final HttpListener httpListener)
     {
-        final UTF8_StringRequest stringRequest = new UTF8_StringRequest(method, url, new Response.Listener<String>()
+        String getUrl = url;
+        getUrl += "?";
+        for (String s : params.keySet())
+        {
+            getUrl += (s + "=" + params.get(s));
+        }
+
+        final UTF8_StringRequest stringRequest = new UTF8_StringRequest(Request.Method.GET, getUrl, new Response.Listener<String>()
         {
             @Override
             public void onResponse(String response)
             {
                 httpToolOnSuccessResponse(activity, getSuccessLog(url, params, response), httpListener, null, response);
             }
-        }, getErrorListener(activity, httpListener))
-        {
-            @Override
-            protected Map<String, String> getParams()
-            {
-                return params;
-            }
-        };
+        }, getErrorListener(activity, httpListener));
 
+        stringRequest.setShouldCache(false);
         VolleySingleton.getInstance(activity)
                        .addToRequestQueue(stringRequest);
     }
@@ -122,6 +123,7 @@ public class HttpTool
             }
         };
 
+        jsonObjectRequest.setShouldCache(false);
         VolleySingleton.getInstance(activity)
                        .addToRequestQueue(jsonObjectRequest);
     }
@@ -159,6 +161,7 @@ public class HttpTool
             }
         };
 
+        multipartRequest.setShouldCache(false);
         VolleySingleton.getInstance(activity)
                        .addToRequestQueue(multipartRequest);
     }
