@@ -3,7 +3,7 @@ Change Log
 
 Version 2017.01.10.1
 ----------------------------
-* Fix - Fix Get Params issue
+* Fix - Get Params issue
 
 Version 2017.01.09.1
 ----------------------------
