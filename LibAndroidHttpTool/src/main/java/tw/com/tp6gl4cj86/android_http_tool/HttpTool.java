@@ -98,7 +98,7 @@ public class HttpTool
             {
                 httpToolOnSuccessResponse(activity, getSuccessLog(url, params, response), httpListener, null, response);
             }
-        }, getErrorListener(activity, httpListener));
+        }, getErrorListener(activity, httpListener, url, params));
 
         stringRequest.setShouldCache(false);
         VolleySingleton.getInstance(activity)
@@ -107,21 +107,14 @@ public class HttpTool
 
     public static void requestJSON(final int method, final Activity activity, final String url, final Map<String, String> params, final HttpListener httpListener)
     {
-        final UTF8_JsonObjectRequest jsonObjectRequest = new UTF8_JsonObjectRequest(method, url, null, new Response.Listener<JSONObject>()
+        final UTF8_JsonObjectRequest jsonObjectRequest = new UTF8_JsonObjectRequest(method, url, new JSONObject(params), new Response.Listener<JSONObject>()
         {
             @Override
             public void onResponse(JSONObject response)
             {
                 httpToolOnSuccessResponse(activity, getSuccessLog(url, params, response.toString()), httpListener, response, null);
             }
-        }, getErrorListener(activity, httpListener))
-        {
-            @Override
-            protected Map<String, String> getParams()
-            {
-                return params;
-            }
-        };
+        }, getErrorListener(activity, httpListener, url, params));
 
         jsonObjectRequest.setShouldCache(false);
         VolleySingleton.getInstance(activity)
@@ -146,7 +139,7 @@ public class HttpTool
                     e.printStackTrace();
                 }
             }
-        }, getErrorListener(activity, httpListener))
+        }, getErrorListener(activity, httpListener, url, params))
         {
             @Override
             protected Map<String, String> getParams()
@@ -207,7 +200,7 @@ public class HttpTool
         }
     }
 
-    private static Response.ErrorListener getErrorListener(final Activity activity, final HttpListener httpListener)
+    private static Response.ErrorListener getErrorListener(final Activity activity, final HttpListener httpListener, final String url, final Map<String, String> params)
     {
         return new Response.ErrorListener()
         {
@@ -215,18 +208,18 @@ public class HttpTool
             @Override
             public void onErrorResponse(VolleyError error)
             {
-                httpToolOnErrorResponse(error, activity, httpListener);
+                httpToolOnErrorResponse(error, activity, httpListener, url, params);
             }
         };
     }
 
-    private static void httpToolOnErrorResponse(VolleyError error, Activity activity, HttpListener httpListener)
+    private static void httpToolOnErrorResponse(VolleyError error, Activity activity, HttpListener httpListener, String url, Map<String, String> params)
     {
         if (!activity.isFinishing())
         {
             final String message = error != null ? error.getMessage() : "";
             final String body = error != null && error.networkResponse != null && error.networkResponse.data != null ? new String(error.networkResponse.data) : "";
-            final String errorStr = "VolleyError : " + message + "\nVolleyError body : " + body;
+            final String errorStr = "VolleyError : " + message + "\nVolleyError body : " + body + "\nurl : " + url + "\nparams : " + (params != null ? params.toString() : "");
 
             if (httpListener != null)
             {
