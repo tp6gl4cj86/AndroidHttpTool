@@ -3,12 +3,12 @@ Change Log
 
 Version 1.0.0
 ----------------------------
-* Fix - Post Params issue
-* Update - okhttp to 3.5.0
+* Fix - `Post` Params issue
+* Update - `okhttp to 3.5.0`
 
 Version 2017.01.10.1
 ----------------------------
-* Fix - Get Params issue
+* Fix - `Get` Params issue
 
 Version 2017.01.09.1
 ----------------------------
@@ -16,7 +16,7 @@ Version 2017.01.09.1
 
 Version 2017.01.08.1
 ----------------------------
- * Fix - Request params by UTF-8
+ * Fix - Request params by `UTF-8`
 
 Version 2016.12.19.1
 ----------------------------
