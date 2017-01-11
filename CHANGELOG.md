@@ -4,7 +4,7 @@ Change Log
 Version 1.0.0
 ----------------------------
 * Fix - Post Params issue
-* Update - Okhttp to 3.5.0
+* Update - okhttp to 3.5.0
 
 Version 2017.01.10.1
 ----------------------------
