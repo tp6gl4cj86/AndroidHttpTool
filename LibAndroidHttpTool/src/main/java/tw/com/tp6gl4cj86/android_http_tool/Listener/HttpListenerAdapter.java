@@ -15,11 +15,11 @@ public abstract class HttpListenerAdapter implements HttpListener
 
     }
 
-    @Override
-    public void onSuccess(String data, String log)
-    {
-
-    }
+    //    @Override
+    //    public void onSuccess(String data, String log)
+    //    {
+    //
+    //    }
 
     @Override
     public void onFailure(String errorStr)

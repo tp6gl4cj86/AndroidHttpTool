@@ -20,7 +20,6 @@ import tw.com.tp6gl4cj86.android_http_tool.Listener.HttpListener;
 import tw.com.tp6gl4cj86.android_http_tool.Listener.HttpListenerAdapter;
 import tw.com.tp6gl4cj86.android_http_tool.Request.DataPart;
 import tw.com.tp6gl4cj86.android_http_tool.Request.UTF8_JsonObjectRequest;
-import tw.com.tp6gl4cj86.android_http_tool.Request.UTF8_StringRequest;
 import tw.com.tp6gl4cj86.android_http_tool.Request.VolleyMultipartRequest;
 
 
@@ -57,9 +56,9 @@ public class HttpTool
         requestJSON(Request.Method.POST, activity, url, params, httpListener);
     }
 
-    public static void post(Activity activity, String url, Map<String, String> params, Map<String, DataPart> fileParams, HttpListener httpListener)
+    public static void postWithFile(Activity activity, String url, Map<String, String> params, Map<String, DataPart> fileParams, HttpListener httpListener)
     {
-        requestJSON(activity, url, params, fileParams, httpListener);
+        requestJSONWithFile(activity, url, params, fileParams, httpListener);
     }
 
     public static void get(Activity activity, String url)
@@ -79,31 +78,36 @@ public class HttpTool
 
     public static void get(Activity activity, String url, Map<String, String> params, HttpListener httpListener)
     {
-        requestGetString(activity, url, params, httpListener);
-    }
-
-    public static void requestGetString(final Activity activity, final String url, final Map<String, String> params, final HttpListener httpListener)
-    {
-        String getUrl = url;
-        getUrl += "?";
+        url += "?Olis=Android";
         for (String s : params.keySet())
         {
-            getUrl += (s + "=" + params.get(s));
+            url += ("&" + s + "=" + params.get(s));
         }
-
-        final UTF8_StringRequest stringRequest = new UTF8_StringRequest(Request.Method.GET, getUrl, new Response.Listener<String>()
-        {
-            @Override
-            public void onResponse(String response)
-            {
-                httpToolOnSuccessResponse(activity, getSuccessLog(url, params, response), httpListener, null, response);
-            }
-        }, getErrorListener(activity, httpListener, url, params));
-
-        stringRequest.setShouldCache(false);
-        VolleySingleton.getInstance(activity)
-                       .addToRequestQueue(stringRequest);
+        requestJSON(Request.Method.GET, activity, url, params, httpListener);
     }
+
+    //    public static void requestGetString(final Activity activity, final String url, final Map<String, String> params, final HttpListener httpListener)
+    //    {
+    //        String getUrl = url;
+    //        getUrl += "?";
+    //        for (String s : params.keySet())
+    //        {
+    //            getUrl += (s + "=" + params.get(s));
+    //        }
+    //
+    //        final UTF8_StringRequest stringRequest = new UTF8_StringRequest(Request.Method.GET, getUrl, new Response.Listener<String>()
+    //        {
+    //            @Override
+    //            public void onResponse(String response)
+    //            {
+    //                httpToolOnSuccessResponse(activity, getSuccessLog(url, params, response), httpListener, null, response);
+    //            }
+    //        }, getErrorListener(activity, httpListener, url, params));
+    //
+    //        stringRequest.setShouldCache(false);
+    //        VolleySingleton.getInstance(activity)
+    //                       .addToRequestQueue(stringRequest);
+    //    }
 
     public static void requestJSON(final int method, final Activity activity, final String url, final Map<String, String> params, final HttpListener httpListener)
     {
@@ -112,16 +116,16 @@ public class HttpTool
             @Override
             public void onResponse(JSONObject response)
             {
-                httpToolOnSuccessResponse(activity, getSuccessLog(url, params, response.toString()), httpListener, response, null);
+                httpToolOnSuccessResponse(activity, getSuccessLog(parseMethod(method) + " " + url, params, response.toString()), httpListener, response);
             }
-        }, getErrorListener(activity, httpListener, url, params));
+        }, getErrorListener(activity, httpListener, parseMethod(method) + " " + url, params));
 
         jsonObjectRequest.setShouldCache(false);
         VolleySingleton.getInstance(activity)
                        .addToRequestQueue(jsonObjectRequest);
     }
 
-    public static void requestJSON(final Activity activity, final String url, final Map<String, String> params, final Map<String, DataPart> fileParams, final HttpListener httpListener)
+    public static void requestJSONWithFile(final Activity activity, final String url, final Map<String, String> params, final Map<String, DataPart> fileParams, final HttpListener httpListener)
     {
         final VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, url, new Response.Listener<NetworkResponse>()
         {
@@ -132,14 +136,14 @@ public class HttpTool
                 {
                     final JSONObject json = new JSONObject(new String(response.data));
 
-                    httpToolOnSuccessResponse(activity, getSuccessLog(url, params, json.toString()), httpListener, json, null);
+                    httpToolOnSuccessResponse(activity, getSuccessLog("POST " + url, params, json.toString()), httpListener, json);
                 }
                 catch (JSONException e)
                 {
                     e.printStackTrace();
                 }
             }
-        }, getErrorListener(activity, httpListener, url, params))
+        }, getErrorListener(activity, httpListener, "POST " + url, params))
         {
             @Override
             protected Map<String, String> getParams()
@@ -166,12 +170,12 @@ public class HttpTool
 
     private static String getSuccessLog(String url, Map<String, String> params, String response)
     {
-        return "url : " + url + "\nparams : " + (params != null ? params.toString() : "") + "\nresponse : " + response;
+        return "Url      : " + url + "\nParams   : " + parseParams(params) + "\nResponse : " + response;
     }
 
-    private static void httpToolOnSuccessResponse(Activity activity, String log, HttpListener httpListener, JSONObject jsonResponse, String stringResponse)
+    private static void httpToolOnSuccessResponse(Activity activity, String log, HttpListener httpListener, JSONObject jsonResponse)
     {
-        if (jsonResponse != null || stringResponse != null)
+        if (jsonResponse != null)
         {
             if (!activity.isFinishing())
             {
@@ -185,16 +189,6 @@ public class HttpTool
                     {
                         e.printStackTrace();
                     }
-                }
-
-                if (httpListener != null && stringResponse != null)
-                {
-                    httpListener.onSuccess(stringResponse, log);
-                }
-
-                if (mStaticHttpListenerAdapter != null)
-                {
-                    mStaticHttpListenerAdapter.onSuccess(stringResponse, log);
                 }
             }
         }
@@ -219,7 +213,11 @@ public class HttpTool
         {
             final String message = error != null ? error.getMessage() : "";
             final String body = error != null && error.networkResponse != null && error.networkResponse.data != null ? new String(error.networkResponse.data) : "";
-            final String errorStr = "VolleyError : " + message + "\nVolleyError body : " + body + "\nurl : " + url + "\nparams : " + (params != null ? params.toString() : "");
+            String errorStr = "Status Code   : " + (error != null && error.networkResponse != null ? error.networkResponse.statusCode : "");
+            errorStr += "\nUrl           : " + url;
+            errorStr += "\nParams        : " + parseParams(params);
+            errorStr += "\nError message : " + message;
+            errorStr += "\nError body    : " + body;
 
             if (httpListener != null)
             {
@@ -231,6 +229,29 @@ public class HttpTool
                 mStaticHttpListenerAdapter.onFailure(errorStr);
             }
         }
+    }
+
+    private static String parseMethod(int method)
+    {
+        switch (method)
+        {
+            default:
+            case Request.Method.GET:
+                return "GET";
+            case Request.Method.POST:
+                return "POST";
+            case Request.Method.PUT:
+                return "PUT";
+            case Request.Method.PATCH:
+                return "PATCH";
+            case Request.Method.DELETE:
+                return "DELETE";
+        }
+    }
+
+    private static String parseParams(Map<String, String> params)
+    {
+        return params != null ? params.toString() : "";
     }
 
 }
