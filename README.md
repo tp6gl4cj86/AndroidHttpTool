@@ -60,7 +60,7 @@ params.put("key", "value");
 HttpListenerAdapter httpListener = new HttpListenerAdapter()
 {
     @Override
-    public void onSuccess(String data, String log)
+    public void onSuccess(JSONObject data, String log) throws JSONException
     {
         super.onSuccess(data, log);
     }
@@ -87,7 +87,16 @@ Map<String, DataPart> fileParams = new HashMap<>();
 fileParams.put("key", HttpTool.getDataPart(new File("..."), "mimeType"));
 ...
 
-HttpTool.post(activity, url, params, fileParams, httpListener);
+HttpTool.postWithFile(activity, url, params, fileParams, httpListener);
+```
+
+# Custom Http Request
+```java
+// method
+// Request.Method.GET
+// Request.Method.POST ... other
+
+HttpTool.requestJSON(method, activity, url, params, httpListener)
 ```
 
 # DataPart Module
