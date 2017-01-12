@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Version 1.0.1
+----------------------------
+* Fix - `Get` Params issue
+* Tune - Error Message more detail
+* Remove - Request for String func
+
 Version 1.0.0
 ----------------------------
 * Fix - `Post` Params issue
