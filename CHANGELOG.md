@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 1.0.4
+----------------------------
+* New - Error Message return `Response Body`
+
 Version 1.0.3
 ----------------------------
 * New - Error Message return `Status Code`
