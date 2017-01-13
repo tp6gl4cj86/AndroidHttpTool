@@ -191,20 +191,20 @@ public class HttpTool
             final int statusCode = error != null && error.networkResponse != null ? error.networkResponse.statusCode : -1;
             final String message = error != null ? error.getMessage() : "";
             final String body = error != null && error.networkResponse != null && error.networkResponse.data != null ? new String(error.networkResponse.data) : "";
-            String errorStr = "Status Code   : " + statusCode;
-            errorStr += "\nUrl           : " + url;
-            errorStr += "\nParams        : " + parseParams(params);
-            errorStr += "\nError message : " + message;
-            errorStr += "\nError body    : " + body;
+            String log = "Status Code   : " + statusCode;
+            log += "\nUrl           : " + url;
+            log += "\nParams        : " + parseParams(params);
+            log += "\nError message : " + message;
+            log += "\nError body    : " + body;
 
             if (httpListener != null)
             {
-                httpListener.onFailure(statusCode, errorStr);
+                httpListener.onFailure(statusCode, body, log);
             }
 
             if (mStaticHttpListenerAdapter != null)
             {
-                mStaticHttpListenerAdapter.onFailure(statusCode, errorStr);
+                mStaticHttpListenerAdapter.onFailure(statusCode, body, log);
             }
         }
     }

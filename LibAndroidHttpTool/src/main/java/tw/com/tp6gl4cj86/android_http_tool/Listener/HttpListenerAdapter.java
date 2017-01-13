@@ -16,7 +16,7 @@ public abstract class HttpListenerAdapter implements HttpListener
     }
 
     @Override
-    public void onFailure(int statusCode, String errorStr)
+    public void onFailure(int statusCode, String body, String log)
     {
 
     }
