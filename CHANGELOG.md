@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 1.0.3
+----------------------------
+* New - Error Message return `Status Code`
+
 Version 1.0.2
 ----------------------------
 * Tune - Request without activity(null)
