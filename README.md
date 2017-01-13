@@ -35,7 +35,7 @@ HttpListenerAdapter httpListener = new HttpListenerAdapter()
     }
 
     @Override
-    public void onFailure(String errorStr)
+    public void onFailure(int statusCode, String body, String log)
     {
         super.onFailure(errorStr);
     }
@@ -66,7 +66,7 @@ HttpListenerAdapter httpListener = new HttpListenerAdapter()
     }
 
     @Override
-    public void onFailure(String errorStr)
+    public void onFailure(int statusCode, String body, String log)
     {
         super.onFailure(errorStr);
     }
