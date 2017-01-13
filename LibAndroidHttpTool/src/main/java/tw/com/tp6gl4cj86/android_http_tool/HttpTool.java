@@ -177,9 +177,9 @@ public class HttpTool
     {
         if (jsonResponse != null)
         {
-            if (!activity.isFinishing())
+            if (activity == null || !activity.isFinishing())
             {
-                if (httpListener != null && jsonResponse != null)
+                if (httpListener != null)
                 {
                     try
                     {
@@ -209,7 +209,7 @@ public class HttpTool
 
     private static void httpToolOnErrorResponse(VolleyError error, Activity activity, HttpListener httpListener, String url, Map<String, String> params)
     {
-        if (!activity.isFinishing())
+        if (activity == null || !activity.isFinishing())
         {
             final String message = error != null ? error.getMessage() : "";
             final String body = error != null && error.networkResponse != null && error.networkResponse.data != null ? new String(error.networkResponse.data) : "";
