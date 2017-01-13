@@ -3,7 +3,7 @@ Change Log
 
 Version 1.0.2
 ----------------------------
-* Fix - Request without activity(null)
+* Tune - Request without activity(null)
 
 Version 1.0.1
 ----------------------------
