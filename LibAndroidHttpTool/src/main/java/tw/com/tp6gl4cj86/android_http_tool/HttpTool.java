@@ -86,29 +86,6 @@ public class HttpTool
         requestJSON(Request.Method.GET, activity, url, params, httpListener);
     }
 
-    //    public static void requestGetString(final Activity activity, final String url, final Map<String, String> params, final HttpListener httpListener)
-    //    {
-    //        String getUrl = url;
-    //        getUrl += "?";
-    //        for (String s : params.keySet())
-    //        {
-    //            getUrl += (s + "=" + params.get(s));
-    //        }
-    //
-    //        final UTF8_StringRequest stringRequest = new UTF8_StringRequest(Request.Method.GET, getUrl, new Response.Listener<String>()
-    //        {
-    //            @Override
-    //            public void onResponse(String response)
-    //            {
-    //                httpToolOnSuccessResponse(activity, getSuccessLog(url, params, response), httpListener, null, response);
-    //            }
-    //        }, getErrorListener(activity, httpListener, url, params));
-    //
-    //        stringRequest.setShouldCache(false);
-    //        VolleySingleton.getInstance(activity)
-    //                       .addToRequestQueue(stringRequest);
-    //    }
-
     public static void requestJSON(final int method, final Activity activity, final String url, final Map<String, String> params, final HttpListener httpListener)
     {
         final UTF8_JsonObjectRequest jsonObjectRequest = new UTF8_JsonObjectRequest(method, url, new JSONObject(params), new Response.Listener<JSONObject>()
@@ -211,9 +188,10 @@ public class HttpTool
     {
         if (activity == null || !activity.isFinishing())
         {
+            final int statusCode = error != null && error.networkResponse != null ? error.networkResponse.statusCode : -1;
             final String message = error != null ? error.getMessage() : "";
             final String body = error != null && error.networkResponse != null && error.networkResponse.data != null ? new String(error.networkResponse.data) : "";
-            String errorStr = "Status Code   : " + (error != null && error.networkResponse != null ? error.networkResponse.statusCode : "");
+            String errorStr = "Status Code   : " + statusCode;
             errorStr += "\nUrl           : " + url;
             errorStr += "\nParams        : " + parseParams(params);
             errorStr += "\nError message : " + message;
@@ -221,12 +199,12 @@ public class HttpTool
 
             if (httpListener != null)
             {
-                httpListener.onFailure(errorStr);
+                httpListener.onFailure(statusCode, errorStr);
             }
 
             if (mStaticHttpListenerAdapter != null)
             {
-                mStaticHttpListenerAdapter.onFailure(errorStr);
+                mStaticHttpListenerAdapter.onFailure(statusCode, errorStr);
             }
         }
     }

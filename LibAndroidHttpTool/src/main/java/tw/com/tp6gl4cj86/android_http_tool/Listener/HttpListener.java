@@ -8,9 +8,9 @@ import org.json.JSONObject;
  */
 public interface HttpListener
 {
+
     void onSuccess(JSONObject data, String log) throws JSONException;
 
-    //    void onSuccess(String data, String log);
+    void onFailure(int statusCode, String errorStr);
 
-    void onFailure(String errorStr);
 }
