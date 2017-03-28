@@ -1,11 +1,11 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
 
-def version = "1.0.4"
+def version = "1.0.6"
 
 android {
 	compileSdkVersion 25
-	buildToolsVersion "25.0.1"
+	buildToolsVersion "25.0.2"
 
 	useLibrary 'org.apache.http.legacy'
 

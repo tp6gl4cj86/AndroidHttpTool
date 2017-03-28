@@ -2,10 +2,12 @@ package tw.com.tp6gl4cj86.android_http_tool;
 
 import android.app.Activity;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
@@ -19,7 +21,6 @@ import java.util.Map;
 import tw.com.tp6gl4cj86.android_http_tool.Listener.HttpListener;
 import tw.com.tp6gl4cj86.android_http_tool.Listener.HttpListenerAdapter;
 import tw.com.tp6gl4cj86.android_http_tool.Request.DataPart;
-import tw.com.tp6gl4cj86.android_http_tool.Request.UTF8_JsonObjectRequest;
 import tw.com.tp6gl4cj86.android_http_tool.Request.VolleyMultipartRequest;
 
 
@@ -88,18 +89,49 @@ public class HttpTool
 
     public static void requestJSON(final int method, final Activity activity, final String url, final Map<String, String> params, final HttpListener httpListener)
     {
-        final UTF8_JsonObjectRequest jsonObjectRequest = new UTF8_JsonObjectRequest(method, url, new JSONObject(params), new Response.Listener<JSONObject>()
+        //        final UTF8_JsonObjectRequest jsonObjectRequest = new UTF8_JsonObjectRequest(method, url, new JSONObject(params), new Response.Listener<JSONObject>()
+        //        {
+        //            @Override
+        //            public void onResponse(JSONObject response)
+        //            {
+        //                httpToolOnSuccessResponse(activity, getSuccessLog(parseMethod(method) + " " + url, params, response.toString()), httpListener, response);
+        //            }
+        //        }, getErrorListener(activity, httpListener, parseMethod(method) + " " + url, params));
+        //
+        //        jsonObjectRequest.setShouldCache(false);
+        //        VolleySingleton.getInstance(activity)
+        //                       .addToRequestQueue(jsonObjectRequest);
+
+        final StringRequest stringRequest = new StringRequest(method, url, new Response.Listener<String>()
         {
             @Override
-            public void onResponse(JSONObject response)
+            public void onResponse(String response)
             {
-                httpToolOnSuccessResponse(activity, getSuccessLog(parseMethod(method) + " " + url, params, response.toString()), httpListener, response);
+                try
+                {
+                    httpToolOnSuccessResponse(activity, getSuccessLog(parseMethod(method) + " " + url, params, response), httpListener, new JSONObject(response));
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
             }
-        }, getErrorListener(activity, httpListener, parseMethod(method) + " " + url, params));
+        }, getErrorListener(activity, httpListener, parseMethod(method) + " " + url, params))
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError
+            {
+                if (params != null)
+                {
+                    return params;
+                }
+                return super.getParams();
+            }
+        };
 
-        jsonObjectRequest.setShouldCache(false);
+        stringRequest.setShouldCache(false);
         VolleySingleton.getInstance(activity)
-                       .addToRequestQueue(jsonObjectRequest);
+                       .addToRequestQueue(stringRequest);
     }
 
     public static void requestJSONWithFile(final Activity activity, final String url, final Map<String, String> params, final Map<String, DataPart> fileParams, final HttpListener httpListener)
@@ -161,6 +193,18 @@ public class HttpTool
                     try
                     {
                         httpListener.onSuccess(jsonResponse, log);
+                    }
+                    catch (JSONException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (mStaticHttpListenerAdapter != null)
+                {
+                    try
+                    {
+                        mStaticHttpListenerAdapter.onSuccess(jsonResponse, log);
                     }
                     catch (JSONException e)
                     {
