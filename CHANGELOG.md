@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+Version 1.0.6
+----------------------------
+* Fix - `Post` Params issue
+
+Version 1.0.5
+----------------------------
+* Fix - StaticHttpListenerAdapter onSuccess
+
 Version 1.0.4
 ----------------------------
 * New - Error Message return `Response Body`
