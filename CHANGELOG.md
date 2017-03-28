@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 1.0.6
+----------------------------
+* Fix - `Post` Params issue
+
 Version 1.0.5
 ----------------------------
 * Fix - StaticHttpListenerAdapter onSuccess
