@@ -3,7 +3,7 @@ Change Log
 
 Version 1.0.8
 ----------------------------
-* Fix - `UTF-8` issue
+* Fix - some issue
 
 Version 1.0.6
 ----------------------------
