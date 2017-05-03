@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 1.0.7
+----------------------------
+* Fix - `UTF-8` issue
+
 Version 1.0.6
 ----------------------------
 * Fix - `Post` Params issue
