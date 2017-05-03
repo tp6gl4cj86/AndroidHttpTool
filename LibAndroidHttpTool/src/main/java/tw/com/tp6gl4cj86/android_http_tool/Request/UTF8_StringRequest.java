@@ -1,7 +1,12 @@
 package tw.com.tp6gl4cj86.android_http_tool.Request;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
 import com.android.volley.Response;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  * Created by tp6gl4cj86 on 2017/1/7.
@@ -19,16 +24,16 @@ public class UTF8_StringRequest extends StringRequest
         super(url, listener, errorListener);
     }
 
-    //    @Override
-    //    protected Response<String> parseNetworkResponse(NetworkResponse response)
-    //    {
-    //        try
-    //        {
-    //            return Response.success(new String(response.data, "UTF-8"), HttpHeaderParser.parseCacheHeaders(response));
-    //        }
-    //        catch (UnsupportedEncodingException e)
-    //        {
-    //            return Response.error(new ParseError(e));
-    //        }
-    //    }
+    @Override
+    protected Response<String> parseNetworkResponse(NetworkResponse response)
+    {
+        try
+        {
+            return Response.success(new String(response.data, "UTF-8"), HttpHeaderParser.parseCacheHeaders(response));
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            return Response.error(new ParseError(e));
+        }
+    }
 }
