@@ -7,6 +7,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
@@ -20,7 +21,6 @@ import java.util.Map;
 import tw.com.tp6gl4cj86.android_http_tool.Listener.HttpListener;
 import tw.com.tp6gl4cj86.android_http_tool.Listener.HttpListenerAdapter;
 import tw.com.tp6gl4cj86.android_http_tool.Request.DataPart;
-import tw.com.tp6gl4cj86.android_http_tool.Request.UTF8_StringRequest;
 import tw.com.tp6gl4cj86.android_http_tool.Request.VolleyMultipartRequest;
 
 
@@ -102,7 +102,7 @@ public class HttpTool
         //        VolleySingleton.getInstance(activity)
         //                       .addToRequestQueue(jsonObjectRequest);
 
-        final UTF8_StringRequest stringRequest = new UTF8_StringRequest(method, url, new Response.Listener<String>()
+        final StringRequest stringRequest = new StringRequest(method, url, new Response.Listener<String>()
         {
             @Override
             public void onResponse(String response)
