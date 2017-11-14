@@ -87,6 +87,11 @@ public class HttpTool
         requestJSON(Request.Method.GET, activity, url, params, httpListener);
     }
 
+    public static void getWithParmas(Activity activity, String url, HttpListener httpListener)
+    {
+        requestJSON(Request.Method.GET, activity, url, null, httpListener);
+    }
+
     public static void requestJSON(final int method, final Activity activity, final String url, final Map<String, String> params, final HttpListener httpListener)
     {
         //        final UTF8_JsonObjectRequest jsonObjectRequest = new UTF8_JsonObjectRequest(method, url, new JSONObject(params), new Response.Listener<JSONObject>()
