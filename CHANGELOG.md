@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 1.0.9
+----------------------------
+* Add - `GET` with params (without auto add ?Olis=Android)
+
 Version 1.0.8
 ----------------------------
 * Fix - some issue
