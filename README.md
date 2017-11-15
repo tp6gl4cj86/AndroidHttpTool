@@ -76,6 +76,7 @@ HttpListenerAdapter httpListener = new HttpListenerAdapter()
 2. HttpTool.get(activity, url, params);
 3. HttpTool.get(activity, url, httpListener);
 4. HttpTool.get(activity, url, params, httpListener);
+5. HttpTool.getWithParmas(activity, url, httpListener);
 ```
 
 # Http Post func for upload file
