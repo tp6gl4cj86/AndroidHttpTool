@@ -203,6 +203,7 @@ public class HttpTool
                     {
                         e.printStackTrace();
                     }
+                    httpListener.onFinished();
                 }
 
                 if (mStaticHttpListenerAdapter != null)
@@ -215,6 +216,7 @@ public class HttpTool
                     {
                         e.printStackTrace();
                     }
+                    mStaticHttpListenerAdapter.onFinished();
                 }
             }
         }
@@ -249,11 +251,13 @@ public class HttpTool
             if (httpListener != null)
             {
                 httpListener.onFailure(statusCode, body, log);
+                httpListener.onFinished();
             }
 
             if (mStaticHttpListenerAdapter != null)
             {
                 mStaticHttpListenerAdapter.onFailure(statusCode, body, log);
+                mStaticHttpListenerAdapter.onFinished();
             }
         }
     }

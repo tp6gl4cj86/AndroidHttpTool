@@ -13,4 +13,6 @@ public interface HttpListener
 
     void onFailure(int statusCode, String body, String log);
 
+    void onFinished();
+
 }

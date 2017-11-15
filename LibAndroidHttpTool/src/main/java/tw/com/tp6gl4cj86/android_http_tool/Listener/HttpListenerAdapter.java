@@ -21,4 +21,10 @@ public abstract class HttpListenerAdapter implements HttpListener
 
     }
 
+    @Override
+    public void onFinished()
+    {
+
+    }
+    
 }
