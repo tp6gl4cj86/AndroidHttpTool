@@ -1,6 +1,7 @@
 package tw.com.tp6gl4cj86.android_http_tool;
 
 import android.app.Activity;
+import android.content.Context;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -37,74 +38,74 @@ public class HttpTool
         HttpTool.mStaticHttpListenerAdapter = mStaticHttpListenerAdapter;
     }
 
-    public static void post(Activity activity, String url)
+    public static void post(Context context, String url)
     {
-        post(activity, url, new HashMap<String, String>(), null);
+        post(context, url, new HashMap<String, String>(), null);
     }
 
-    public static void post(Activity activity, String url, Map<String, String> params)
+    public static void post(Context context, String url, Map<String, String> params)
     {
-        post(activity, url, params, null);
+        post(context, url, params, null);
     }
 
-    public static void post(Activity activity, String url, final HttpListener httpListener)
+    public static void post(Context context, String url, final HttpListener httpListener)
     {
-        post(activity, url, new HashMap<String, String>(), httpListener);
+        post(context, url, new HashMap<String, String>(), httpListener);
     }
 
-    public static void post(Activity activity, String url, Map<String, String> params, HttpListener httpListener)
+    public static void post(Context context, String url, Map<String, String> params, HttpListener httpListener)
     {
-        requestJSON(Request.Method.POST, activity, url, params, httpListener);
+        requestJSON(Request.Method.POST, context, url, params, httpListener);
     }
 
-    public static void postWithFile(Activity activity, String url, Map<String, String> params, Map<String, DataPart> fileParams, HttpListener httpListener)
+    public static void postWithFile(Context context, String url, Map<String, String> params, Map<String, DataPart> fileParams, HttpListener httpListener)
     {
-        requestJSONWithFile(activity, url, params, fileParams, httpListener);
+        requestJSONWithFile(context, url, params, fileParams, httpListener);
     }
 
-    public static void get(Activity activity, String url)
+    public static void get(Context context, String url)
     {
-        get(activity, url, new HashMap<String, String>(), null);
+        get(context, url, new HashMap<String, String>(), null);
     }
 
-    public static void get(Activity activity, String url, Map<String, String> params)
+    public static void get(Context context, String url, Map<String, String> params)
     {
-        get(activity, url, params, null);
+        get(context, url, params, null);
     }
 
-    public static void get(Activity activity, String url, final HttpListener httpListener)
+    public static void get(Context context, String url, final HttpListener httpListener)
     {
-        get(activity, url, new HashMap<String, String>(), httpListener);
+        get(context, url, new HashMap<String, String>(), httpListener);
     }
 
-    public static void get(Activity activity, String url, Map<String, String> params, HttpListener httpListener)
+    public static void get(Context context, String url, Map<String, String> params, HttpListener httpListener)
     {
         url += "?Olis=Android";
         for (String s : params.keySet())
         {
             url += ("&" + s + "=" + params.get(s));
         }
-        requestJSON(Request.Method.GET, activity, url, params, httpListener);
+        requestJSON(Request.Method.GET, context, url, params, httpListener);
     }
 
-    public static void getWithParmas(Activity activity, String url, HttpListener httpListener)
+    public static void getWithParmas(Context context, String url, HttpListener httpListener)
     {
-        requestJSON(Request.Method.GET, activity, url, null, httpListener);
+        requestJSON(Request.Method.GET, context, url, null, httpListener);
     }
 
-    public static void requestJSON(final int method, final Activity activity, final String url, final Map<String, String> params, final HttpListener httpListener)
+    public static void requestJSON(final int method, final Context context, final String url, final Map<String, String> params, final HttpListener httpListener)
     {
         //        final UTF8_JsonObjectRequest jsonObjectRequest = new UTF8_JsonObjectRequest(method, url, new JSONObject(params), new Response.Listener<JSONObject>()
         //        {
         //            @Override
         //            public void onResponse(JSONObject response)
         //            {
-        //                httpToolOnSuccessResponse(activity, getSuccessLog(parseMethod(method) + " " + url, params, response.toString()), httpListener, response);
+        //                httpToolOnSuccessResponse(context, getSuccessLog(parseMethod(method) + " " + url, params, response.toString()), httpListener, response);
         //            }
-        //        }, getErrorListener(activity, httpListener, parseMethod(method) + " " + url, params));
+        //        }, getErrorListener(context, httpListener, parseMethod(method) + " " + url, params));
         //
         //        jsonObjectRequest.setShouldCache(false);
-        //        VolleySingleton.getInstance(activity)
+        //        VolleySingleton.getInstance(context)
         //                       .addToRequestQueue(jsonObjectRequest);
 
         final StringRequest stringRequest = new StringRequest(method, url, new Response.Listener<String>()
@@ -114,14 +115,14 @@ public class HttpTool
             {
                 try
                 {
-                    httpToolOnSuccessResponse(activity, getSuccessLog(parseMethod(method) + " " + url, params, response), httpListener, new JSONObject(response));
+                    httpToolOnSuccessResponse(context, getSuccessLog(parseMethod(method) + " " + url, params, response), httpListener, new JSONObject(response));
                 }
                 catch (JSONException e)
                 {
                     e.printStackTrace();
                 }
             }
-        }, getErrorListener(activity, httpListener, parseMethod(method) + " " + url, params))
+        }, getErrorListener(context, httpListener, parseMethod(method) + " " + url, params))
         {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError
@@ -135,11 +136,11 @@ public class HttpTool
         };
 
         stringRequest.setShouldCache(false);
-        VolleySingleton.getInstance(activity)
+        VolleySingleton.getInstance(context)
                        .addToRequestQueue(stringRequest);
     }
 
-    public static void requestJSONWithFile(final Activity activity, final String url, final Map<String, String> params, final Map<String, DataPart> fileParams, final HttpListener httpListener)
+    public static void requestJSONWithFile(final Context context, final String url, final Map<String, String> params, final Map<String, DataPart> fileParams, final HttpListener httpListener)
     {
         final VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, url, new Response.Listener<NetworkResponse>()
         {
@@ -150,14 +151,14 @@ public class HttpTool
                 {
                     final JSONObject json = new JSONObject(new String(response.data));
 
-                    httpToolOnSuccessResponse(activity, getSuccessLog("POST " + url, params, json.toString()), httpListener, json);
+                    httpToolOnSuccessResponse(context, getSuccessLog("POST " + url, params, json.toString()), httpListener, json);
                 }
                 catch (JSONException e)
                 {
                     e.printStackTrace();
                 }
             }
-        }, getErrorListener(activity, httpListener, "POST " + url, params))
+        }, getErrorListener(context, httpListener, "POST " + url, params))
         {
             @Override
             protected Map<String, String> getParams()
@@ -173,7 +174,7 @@ public class HttpTool
         };
 
         multipartRequest.setShouldCache(false);
-        VolleySingleton.getInstance(activity)
+        VolleySingleton.getInstance(context)
                        .addToRequestQueue(multipartRequest);
     }
 
@@ -187,11 +188,11 @@ public class HttpTool
         return "Url      : " + url + "\nParams   : " + parseParams(params) + "\nResponse : " + response;
     }
 
-    private static void httpToolOnSuccessResponse(Activity activity, String log, HttpListener httpListener, JSONObject jsonResponse)
+    private static void httpToolOnSuccessResponse(Context context, String log, HttpListener httpListener, JSONObject jsonResponse)
     {
         if (jsonResponse != null)
         {
-            if (activity == null || !activity.isFinishing())
+            if (context == null || (context instanceof Activity && !((Activity) context).isFinishing()))
             {
                 if (httpListener != null)
                 {
@@ -222,7 +223,7 @@ public class HttpTool
         }
     }
 
-    private static Response.ErrorListener getErrorListener(final Activity activity, final HttpListener httpListener, final String url, final Map<String, String> params)
+    private static Response.ErrorListener getErrorListener(final Context context, final HttpListener httpListener, final String url, final Map<String, String> params)
     {
         return new Response.ErrorListener()
         {
@@ -230,14 +231,14 @@ public class HttpTool
             @Override
             public void onErrorResponse(VolleyError error)
             {
-                httpToolOnErrorResponse(error, activity, httpListener, url, params);
+                httpToolOnErrorResponse(error, context, httpListener, url, params);
             }
         };
     }
 
-    private static void httpToolOnErrorResponse(VolleyError error, Activity activity, HttpListener httpListener, String url, Map<String, String> params)
+    private static void httpToolOnErrorResponse(VolleyError error, Context context, HttpListener httpListener, String url, Map<String, String> params)
     {
-        if (activity == null || !activity.isFinishing())
+        if (context == null || (context instanceof Activity && !((Activity) context).isFinishing()))
         {
             final int statusCode = error != null && error.networkResponse != null ? error.networkResponse.statusCode : -1;
             final String message = error != null ? error.getMessage() : "";
