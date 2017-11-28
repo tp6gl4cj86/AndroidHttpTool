@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 1.0.11
+----------------------------
+* Fix - Change Activity to Context
+
 Version 1.0.10
 ----------------------------
 * Add - HttpListener.onFinished()
