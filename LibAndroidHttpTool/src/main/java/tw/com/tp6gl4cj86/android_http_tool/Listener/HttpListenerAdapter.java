@@ -10,6 +10,12 @@ public abstract class HttpListenerAdapter implements HttpListener
 {
 
     @Override
+    public void onSuccess(String data, String log)
+    {
+
+    }
+
+    @Override
     public void onSuccess(JSONObject data, String log) throws JSONException
     {
 
@@ -26,5 +32,5 @@ public abstract class HttpListenerAdapter implements HttpListener
     {
 
     }
-    
+
 }

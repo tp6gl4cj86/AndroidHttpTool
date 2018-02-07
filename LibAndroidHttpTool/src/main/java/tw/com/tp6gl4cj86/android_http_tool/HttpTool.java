@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -113,14 +114,7 @@ public class HttpTool
             @Override
             public void onResponse(String response)
             {
-                try
-                {
-                    httpToolOnSuccessResponse(context, getSuccessLog(parseMethod(method) + " " + url, params, response), httpListener, new JSONObject(response));
-                }
-                catch (JSONException e)
-                {
-                    e.printStackTrace();
-                }
+                httpToolOnSuccessResponse(context, getSuccessLog(parseMethod(method) + " " + url, params, response), httpListener, response);
             }
         }, getErrorListener(context, httpListener, parseMethod(method) + " " + url, params))
         {
@@ -136,6 +130,7 @@ public class HttpTool
         };
 
         stringRequest.setShouldCache(false);
+        stringRequest.setRetryPolicy(getRetryPolicy());
         VolleySingleton.getInstance(context)
                        .addToRequestQueue(stringRequest);
     }
@@ -147,16 +142,8 @@ public class HttpTool
             @Override
             public void onResponse(NetworkResponse response)
             {
-                try
-                {
-                    final JSONObject json = new JSONObject(new String(response.data));
-
-                    httpToolOnSuccessResponse(context, getSuccessLog("POST " + url, params, json.toString()), httpListener, json);
-                }
-                catch (JSONException e)
-                {
-                    e.printStackTrace();
-                }
+                final String responseStr = new String(response.data);
+                httpToolOnSuccessResponse(context, getSuccessLog("POST " + url, params, responseStr), httpListener, responseStr);
             }
         }, getErrorListener(context, httpListener, "POST " + url, params))
         {
@@ -174,6 +161,7 @@ public class HttpTool
         };
 
         multipartRequest.setShouldCache(false);
+        multipartRequest.setRetryPolicy(getRetryPolicy());
         VolleySingleton.getInstance(context)
                        .addToRequestQueue(multipartRequest);
     }
@@ -188,17 +176,19 @@ public class HttpTool
         return "Url      : " + url + "\nParams   : " + parseParams(params) + "\nResponse : " + response;
     }
 
-    private static void httpToolOnSuccessResponse(Context context, String log, HttpListener httpListener, JSONObject jsonResponse)
+    private static void httpToolOnSuccessResponse(Context context, String log, HttpListener httpListener, String response)
     {
-        if (jsonResponse != null)
+        if (response != null)
         {
             if (context == null || (context instanceof Activity && !((Activity) context).isFinishing()))
             {
                 if (httpListener != null)
                 {
+                    httpListener.onSuccess(response, log);
+
                     try
                     {
-                        httpListener.onSuccess(jsonResponse, log);
+                        httpListener.onSuccess(new JSONObject(response), log);
                     }
                     catch (JSONException e)
                     {
@@ -209,9 +199,11 @@ public class HttpTool
 
                 if (mStaticHttpListenerAdapter != null)
                 {
+                    mStaticHttpListenerAdapter.onSuccess(response, log);
+
                     try
                     {
-                        mStaticHttpListenerAdapter.onSuccess(jsonResponse, log);
+                        mStaticHttpListenerAdapter.onSuccess(new JSONObject(response), log);
                     }
                     catch (JSONException e)
                     {
@@ -284,6 +276,30 @@ public class HttpTool
     private static String parseParams(Map<String, String> params)
     {
         return params != null ? params.toString() : "";
+    }
+
+
+    private static DefaultRetryPolicy retryPolicy       = new DefaultRetryPolicy();
+    private static int                initialTimeoutMs  = DefaultRetryPolicy.DEFAULT_TIMEOUT_MS;
+    private static int                maxNumRetries     = DefaultRetryPolicy.DEFAULT_MAX_RETRIES;
+    private static float              backoffMultiplier = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
+
+    public static void setRetryPolicy(int initialTimeoutMs, int maxNumRetries, float backoffMultiplier)
+    {
+        HttpTool.initialTimeoutMs = initialTimeoutMs;
+        HttpTool.maxNumRetries = maxNumRetries;
+        HttpTool.backoffMultiplier = backoffMultiplier;
+
+        retryPolicy = new DefaultRetryPolicy(initialTimeoutMs, maxNumRetries, backoffMultiplier);
+    }
+
+    private static DefaultRetryPolicy getRetryPolicy()
+    {
+        if (retryPolicy == null)
+        {
+            retryPolicy = new DefaultRetryPolicy(initialTimeoutMs, maxNumRetries, backoffMultiplier);
+        }
+        return retryPolicy;
     }
 
 }
