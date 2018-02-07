@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 1.0.12
+----------------------------
+* Add - Listener onSuccess(String data, String log);
+* Add - setRetryPolicy for custom timeout
+
 Version 1.0.11
 ----------------------------
 * Fix - Change Activity to Context
