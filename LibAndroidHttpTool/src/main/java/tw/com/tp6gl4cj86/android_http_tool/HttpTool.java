@@ -280,8 +280,8 @@ public class HttpTool
 
 
     private static DefaultRetryPolicy retryPolicy       = new DefaultRetryPolicy();
-    private static int                initialTimeoutMs  = DefaultRetryPolicy.DEFAULT_TIMEOUT_MS;
-    private static int                maxNumRetries     = DefaultRetryPolicy.DEFAULT_MAX_RETRIES;
+    private static int                initialTimeoutMs  = 10;
+    private static int                maxNumRetries     = 1;
     private static float              backoffMultiplier = DefaultRetryPolicy.DEFAULT_BACKOFF_MULT;
 
     public static void setRetryPolicy(int initialTimeoutMs, int maxNumRetries, float backoffMultiplier)
