@@ -105,3 +105,12 @@ HttpTool.requestJSON(method, activity, url, params, httpListener)
 TYPE_IMAGE = "image/jpeg"
 TYPE_THREEGPP = "video/3gpp"
 ```
+
+# RetryPolicy
+```java
+/// default 
+/// initialTimeoutMs = 10
+/// maxNumRetries = 1
+/// backoffMultiplier = 1.0f
+setRetryPolicy(int initialTimeoutMs, int maxNumRetries, float backoffMultiplier)
+```
