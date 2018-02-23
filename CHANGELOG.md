@@ -1,5 +1,10 @@
 Change Log
 ==========
+./gradlew clean build generateRelease
+
+Version 1.0.14
+----------------------------
+* Fix - Default initialTimeoutMs Value
 
 Version 1.0.13
 ----------------------------
