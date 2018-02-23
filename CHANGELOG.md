@@ -1,6 +1,5 @@
 Change Log
 ==========
-./gradlew clean build generateRelease
 
 Version 1.0.14
 ----------------------------
