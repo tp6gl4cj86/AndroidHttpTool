@@ -12,7 +12,7 @@ Add dependency.
 
 ```
 dependencies {
-    compile 'tw.com.tp6gl4cj86:android_http_tool:1.0.12'
+    compile 'tw.com.tp6gl4cj86:android_http_tool:1.0.13'
 }
 ```
 
