@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 1.0.13
+----------------------------
+* Fix - Default RetryPolicy Value
+
 Version 1.0.12
 ----------------------------
 * Add - Listener onSuccess(String data, String log);
