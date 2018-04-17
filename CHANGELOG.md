@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 3.0.0
+----------------------------
+* Update Gradle、Lib Version
+
 Version 1.0.14
 ----------------------------
 * Fix - Default initialTimeoutMs Value
