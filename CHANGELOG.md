@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 3.0.1
+----------------------------
+* Fix - Default Retry
+
 Version 3.0.0
 ----------------------------
 * Update Gradle、Lib Version
