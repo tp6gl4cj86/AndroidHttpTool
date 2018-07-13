@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -109,14 +110,16 @@ public class HttpTool
         //        VolleySingleton.getInstance(context)
         //                       .addToRequestQueue(jsonObjectRequest);
 
+        final WeakReference<Context> mWeakContext = new WeakReference<>(context);
+
         final StringRequest stringRequest = new StringRequest(method, url, new Response.Listener<String>()
         {
             @Override
             public void onResponse(String response)
             {
-                httpToolOnSuccessResponse(context, getSuccessLog(parseMethod(method) + " " + url, params, response), httpListener, response);
+                httpToolOnSuccessResponse(mWeakContext, getSuccessLog(parseMethod(method) + " " + url, params, response), httpListener, response);
             }
-        }, getErrorListener(context, httpListener, parseMethod(method) + " " + url, params))
+        }, getErrorListener(mWeakContext, httpListener, parseMethod(method) + " " + url, params))
         {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError
@@ -137,15 +140,17 @@ public class HttpTool
 
     public static void requestJSONWithFile(final Context context, final String url, final Map<String, String> params, final Map<String, DataPart> fileParams, final HttpListener httpListener)
     {
+        final WeakReference<Context> mWeakContext = new WeakReference<>(context);
+
         final VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, url, new Response.Listener<NetworkResponse>()
         {
             @Override
             public void onResponse(NetworkResponse response)
             {
                 final String responseStr = new String(response.data);
-                httpToolOnSuccessResponse(context, getSuccessLog("POST " + url, params, responseStr), httpListener, responseStr);
+                httpToolOnSuccessResponse(mWeakContext, getSuccessLog("POST " + url, params, responseStr), httpListener, responseStr);
             }
-        }, getErrorListener(context, httpListener, "POST " + url, params))
+        }, getErrorListener(mWeakContext, httpListener, "POST " + url, params))
         {
             @Override
             protected Map<String, String> getParams()
@@ -176,11 +181,11 @@ public class HttpTool
         return "Url      : " + url + "\nParams   : " + parseParams(params) + "\nResponse : " + response;
     }
 
-    private static void httpToolOnSuccessResponse(Context context, String log, HttpListener httpListener, String response)
+    private static void httpToolOnSuccessResponse(WeakReference<Context> mWeakContext, String log, HttpListener httpListener, String response)
     {
         if (response != null)
         {
-            if (context == null || (context instanceof Activity && !((Activity) context).isFinishing()))
+            if (mWeakContext.get() == null || (mWeakContext.get() instanceof Activity && !((Activity) mWeakContext.get()).isFinishing()))
             {
                 if (httpListener != null)
                 {
@@ -215,7 +220,7 @@ public class HttpTool
         }
     }
 
-    private static Response.ErrorListener getErrorListener(final Context context, final HttpListener httpListener, final String url, final Map<String, String> params)
+    private static Response.ErrorListener getErrorListener(final WeakReference<Context> mWeakContext, final HttpListener httpListener, final String url, final Map<String, String> params)
     {
         return new Response.ErrorListener()
         {
@@ -223,14 +228,14 @@ public class HttpTool
             @Override
             public void onErrorResponse(VolleyError error)
             {
-                httpToolOnErrorResponse(error, context, httpListener, url, params);
+                httpToolOnErrorResponse(error, mWeakContext, httpListener, url, params);
             }
         };
     }
 
-    private static void httpToolOnErrorResponse(VolleyError error, Context context, HttpListener httpListener, String url, Map<String, String> params)
+    private static void httpToolOnErrorResponse(VolleyError error, final WeakReference<Context> mWeakContext, HttpListener httpListener, String url, Map<String, String> params)
     {
-        if (context == null || (context instanceof Activity && !((Activity) context).isFinishing()))
+        if (mWeakContext.get() == null || (mWeakContext.get() instanceof Activity && !((Activity) mWeakContext.get()).isFinishing()))
         {
             final int statusCode = error != null && error.networkResponse != null ? error.networkResponse.statusCode : -1;
             final String message = error != null ? error.getMessage() : "";
