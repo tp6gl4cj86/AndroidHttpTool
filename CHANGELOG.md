@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 3.0.2
+----------------------------
+* Tune - WeakReference Context avoid Memory Leak
+
 Version 3.0.1
 ----------------------------
 * Fix - Default Retry
