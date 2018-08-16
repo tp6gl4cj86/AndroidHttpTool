@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 3.0.3
+----------------------------
+* Add - Listener onStart func
+
 Version 3.0.2
 ----------------------------
 * Tune - WeakReference Context avoid Memory Leak
