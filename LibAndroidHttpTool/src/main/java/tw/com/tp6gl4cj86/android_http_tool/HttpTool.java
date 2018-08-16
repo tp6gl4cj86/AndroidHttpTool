@@ -132,6 +132,15 @@ public class HttpTool
             }
         };
 
+        if (mStaticHttpListenerAdapter != null)
+        {
+            mStaticHttpListenerAdapter.onStart();
+        }
+        if (httpListener != null)
+        {
+            httpListener.onStart();
+        }
+
         stringRequest.setShouldCache(false);
         stringRequest.setRetryPolicy(getRetryPolicy());
         VolleySingleton.getInstance(context)
@@ -165,6 +174,15 @@ public class HttpTool
             }
         };
 
+        if (mStaticHttpListenerAdapter != null)
+        {
+            mStaticHttpListenerAdapter.onStart();
+        }
+        if (httpListener != null)
+        {
+            httpListener.onStart();
+        }
+
         multipartRequest.setShouldCache(false);
         multipartRequest.setRetryPolicy(getRetryPolicy());
         VolleySingleton.getInstance(context)
@@ -187,21 +205,6 @@ public class HttpTool
         {
             if (mWeakContext.get() == null || (mWeakContext.get() instanceof Activity && !((Activity) mWeakContext.get()).isFinishing()))
             {
-                if (httpListener != null)
-                {
-                    httpListener.onSuccess(response, log);
-
-                    try
-                    {
-                        httpListener.onSuccess(new JSONObject(response), log);
-                    }
-                    catch (JSONException e)
-                    {
-                        e.printStackTrace();
-                    }
-                    httpListener.onFinished();
-                }
-
                 if (mStaticHttpListenerAdapter != null)
                 {
                     mStaticHttpListenerAdapter.onSuccess(response, log);
@@ -215,6 +218,21 @@ public class HttpTool
                         e.printStackTrace();
                     }
                     mStaticHttpListenerAdapter.onFinished();
+                }
+
+                if (httpListener != null)
+                {
+                    httpListener.onSuccess(response, log);
+
+                    try
+                    {
+                        httpListener.onSuccess(new JSONObject(response), log);
+                    }
+                    catch (JSONException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    httpListener.onFinished();
                 }
             }
         }
@@ -246,16 +264,16 @@ public class HttpTool
             log += "\nError message : " + message;
             log += "\nError body    : " + body;
 
-            if (httpListener != null)
-            {
-                httpListener.onFailure(statusCode, body, log);
-                httpListener.onFinished();
-            }
-
             if (mStaticHttpListenerAdapter != null)
             {
                 mStaticHttpListenerAdapter.onFailure(statusCode, body, log);
                 mStaticHttpListenerAdapter.onFinished();
+            }
+
+            if (httpListener != null)
+            {
+                httpListener.onFailure(statusCode, body, log);
+                httpListener.onFinished();
             }
         }
     }

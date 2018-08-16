@@ -1,6 +1,5 @@
 package tw.com.tp6gl4cj86.android_http_tool.Listener;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -16,13 +15,19 @@ public abstract class HttpListenerAdapter implements HttpListener
     }
 
     @Override
-    public void onSuccess(JSONObject data, String log) throws JSONException
+    public void onSuccess(JSONObject data, String log)
     {
 
     }
 
     @Override
     public void onFailure(int statusCode, String body, String log)
+    {
+
+    }
+
+    @Override
+    public void onStart()
     {
 
     }
