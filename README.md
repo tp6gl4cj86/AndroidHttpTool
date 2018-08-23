@@ -114,3 +114,9 @@ TYPE_THREEGPP = "video/3gpp"
 /// backoffMultiplier = 1.0f
 setRetryPolicy(int initialTimeoutMs, int maxNumRetries, float backoffMultiplier)
 ```
+
+# Cancel
+```java
+HttpTool.cancel(context, tag)
+by getTagFromUrl(url)
+```
