@@ -3,8 +3,8 @@ Change Log
 
 Version 3.0.4
 ----------------------------
-* Tune - When addToRequestQueue set tag from url
-* Add - cancel func to cancel http request (by `getTagFromUrl()`)
+* Tune - When addToRequestQueue set tag from url (by `getTagFromUrl()`)
+* Add - `cancel` func to cancel http request (by `getTagFromUrl()`)
 
 Version 3.0.3
 ----------------------------
