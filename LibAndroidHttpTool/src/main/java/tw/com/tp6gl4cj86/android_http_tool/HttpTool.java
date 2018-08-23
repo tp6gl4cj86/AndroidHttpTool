@@ -143,6 +143,7 @@ public class HttpTool
 
         stringRequest.setShouldCache(false);
         stringRequest.setRetryPolicy(getRetryPolicy());
+        stringRequest.setTag(getTagFromUrl(url));
         VolleySingleton.getInstance(context)
                        .addToRequestQueue(stringRequest);
     }
@@ -185,6 +186,7 @@ public class HttpTool
 
         multipartRequest.setShouldCache(false);
         multipartRequest.setRetryPolicy(getRetryPolicy());
+        multipartRequest.setTag(getTagFromUrl(url));
         VolleySingleton.getInstance(context)
                        .addToRequestQueue(multipartRequest);
     }
@@ -323,6 +325,25 @@ public class HttpTool
             retryPolicy = new DefaultRetryPolicy(initialTimeoutMs, maxNumRetries, backoffMultiplier);
         }
         return retryPolicy;
+    }
+
+    public static String getTagFromUrl(String url)
+    {
+        if (url.contains("?"))
+        {
+            return url.substring(0, url.indexOf("?"));
+        }
+        else
+        {
+            return url;
+        }
+    }
+
+    public static void cancel(Context context, String tag)
+    {
+        VolleySingleton.getInstance(context)
+                       .getRequestQueue()
+                       .cancelAll(tag);
     }
 
 }
