@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 3.0.5
+----------------------------
+* Add - custom header
+
 Version 3.0.4
 ----------------------------
 * Tune - Set tag to all http request (`getTagFromUrl()`)
