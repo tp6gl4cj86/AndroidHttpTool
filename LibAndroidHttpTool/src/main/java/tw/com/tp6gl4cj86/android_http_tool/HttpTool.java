@@ -60,6 +60,11 @@ public class HttpTool
         requestJSON(Request.Method.POST, context, url, params, httpListener);
     }
 
+    public static void post(Context context, String url, Map<String, String> header, Map<String, String> params, HttpListener httpListener)
+    {
+        requestJSON(Request.Method.POST, context, url, header, params, httpListener);
+    }
+
     public static void postWithFile(Context context, String url, Map<String, String> params, Map<String, DataPart> fileParams, HttpListener httpListener)
     {
         requestJSONWithFile(context, url, params, fileParams, httpListener);
@@ -97,6 +102,11 @@ public class HttpTool
 
     public static void requestJSON(final int method, final Context context, final String url, final Map<String, String> params, final HttpListener httpListener)
     {
+        requestJSON(method, context, url, new HashMap<String, String>(), params, httpListener);
+    }
+
+    private static void requestJSON(final int method, Context context, final String url, final Map<String, String> header, final Map<String, String> params, final HttpListener httpListener)
+    {
         //        final UTF8_JsonObjectRequest jsonObjectRequest = new UTF8_JsonObjectRequest(method, url, new JSONObject(params), new Response.Listener<JSONObject>()
         //        {
         //            @Override
@@ -129,6 +139,19 @@ public class HttpTool
                     return params;
                 }
                 return super.getParams();
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError
+            {
+                if (header != null)
+                {
+                    return header;
+                }
+                else
+                {
+                    return super.getHeaders();
+                }
             }
         };
 
