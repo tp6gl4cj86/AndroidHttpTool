@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 3.1.0
+----------------------------
+* Fix - Android 9.0 Crash
+
 Version 3.0.5
 ----------------------------
 * Add - custom header
