@@ -6,10 +6,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.OkHttpClient;
-import tw.com.tp6gl4cj86.android_http_tool.HttpStack.OkHttpStack;
+import tw.com.tp6gl4cj86.android_http_tool.HttpStack.OkHttp3Stack;
 
 /**
  * Created by tp6gl4cj86 on 2016/12/5.
@@ -40,8 +37,7 @@ public class VolleySingleton
     {
         if (mRequestQueue == null)
         {
-            mRequestQueue = Volley.newRequestQueue(mContext.getApplicationContext(), new OkHttpStack(new OkHttpClient.Builder().connectTimeout(15, TimeUnit.SECONDS)
-                                                                                                                               .build()));
+            mRequestQueue = Volley.newRequestQueue(mContext.getApplicationContext(), new OkHttp3Stack());
         }
         return mRequestQueue;
     }
