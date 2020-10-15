@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AndroidHttpTool.iml" filepath="$PROJECT_DIR$/AndroidHttpTool.iml" />
-      <module fileurl="file://$PROJECT_DIR$/LibAndroidHttpTool/LibAndroidHttpTool.iml" filepath="$PROJECT_DIR$/LibAndroidHttpTool/LibAndroidHttpTool.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndroidHttpTool.iml" filepath="$PROJECT_DIR$/AndroidHttpTool.iml" group="AndroidHttpTool" />
+      <module fileurl="file://$PROJECT_DIR$/LibAndroidHttpTool/LibAndroidHttpTool.iml" filepath="$PROJECT_DIR$/LibAndroidHttpTool/LibAndroidHttpTool.iml" group="AndroidHttpTool/LibAndroidHttpTool" />
     </modules>
   </component>
 </project>

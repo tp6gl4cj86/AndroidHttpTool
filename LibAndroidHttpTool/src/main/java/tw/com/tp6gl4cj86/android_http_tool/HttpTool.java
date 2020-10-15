@@ -5,10 +5,10 @@ import android.content.Context;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
 import org.apache.commons.io.FileUtils;
@@ -33,6 +33,13 @@ import tw.com.tp6gl4cj86.android_http_tool.Request.VolleyMultipartRequest;
 public class HttpTool
 {
 
+    private static boolean isApplicationJson = false;
+
+    public static void setIsApplicationJson(boolean isApplicationJson)
+    {
+        HttpTool.isApplicationJson = isApplicationJson;
+    }
+
     private static HttpListenerAdapter mStaticHttpListenerAdapter;
 
     public static void setStaticHttpListenerAdapter(HttpListenerAdapter mStaticHttpListenerAdapter)
@@ -42,7 +49,7 @@ public class HttpTool
 
     public static void post(Context context, String url)
     {
-        post(context, url, new HashMap<String, String>(), null);
+        post(context, url, new HashMap<>(), null);
     }
 
     public static void post(Context context, String url, Map<String, String> params)
@@ -52,7 +59,7 @@ public class HttpTool
 
     public static void post(Context context, String url, final HttpListener httpListener)
     {
-        post(context, url, new HashMap<String, String>(), httpListener);
+        post(context, url, new HashMap<>(), httpListener);
     }
 
     public static void post(Context context, String url, Map<String, String> params, HttpListener httpListener)
@@ -72,7 +79,7 @@ public class HttpTool
 
     public static void get(Context context, String url)
     {
-        get(context, url, new HashMap<String, String>(), null);
+        get(context, url, new HashMap<>(), null);
     }
 
     public static void get(Context context, String url, Map<String, String> params)
@@ -82,7 +89,7 @@ public class HttpTool
 
     public static void get(Context context, String url, final HttpListener httpListener)
     {
-        get(context, url, new HashMap<String, String>(), httpListener);
+        get(context, url, new HashMap<>(), httpListener);
     }
 
     public static void get(Context context, String url, Map<String, String> params, HttpListener httpListener)
@@ -102,7 +109,7 @@ public class HttpTool
 
     public static void requestJSON(final int method, final Context context, final String url, final Map<String, String> params, final HttpListener httpListener)
     {
-        requestJSON(method, context, url, new HashMap<String, String>(), params, httpListener);
+        requestJSON(method, context, url, new HashMap<>(), params, httpListener);
     }
 
     private static void requestJSON(final int method, Context context, final String url, final Map<String, String> header, final Map<String, String> params, final HttpListener httpListener)
@@ -122,38 +129,43 @@ public class HttpTool
 
         final WeakReference<Context> mWeakContext = new WeakReference<>(context);
 
-        final StringRequest stringRequest = new StringRequest(method, url, new Response.Listener<String>()
+        final Request request;
+        if (isApplicationJson)
         {
-            @Override
-            public void onResponse(String response)
+            final JSONObject paramsJson = new JSONObject();
+            if (params != null)
             {
-                httpToolOnSuccessResponse(mWeakContext, getSuccessLog(parseMethod(method) + " " + url, params, response), httpListener, response);
-            }
-        }, getErrorListener(mWeakContext, httpListener, parseMethod(method) + " " + url, params))
-        {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError
-            {
-                if (params != null)
+                for (Map.Entry<String, String> stringStringEntry : params.entrySet())
                 {
-                    return params;
+                    try
+                    {
+                        paramsJson.put(stringStringEntry.getKey(), stringStringEntry.getValue());
+                    }
+                    catch (JSONException e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
-                return super.getParams();
             }
+            request = new JsonObjectRequest(method, url, paramsJson, response -> httpToolOnSuccessResponse(mWeakContext, getSuccessLog(parseMethod(method) + " " + url, params, response.toString()), httpListener, response.toString()), getErrorListener(mWeakContext, httpListener, parseMethod(method) + " " + url, params));
+        }
+        else
+        {
+            request = new StringRequest(method, url, response -> httpToolOnSuccessResponse(mWeakContext, getSuccessLog(parseMethod(method) + " " + url, params, response), httpListener, response), getErrorListener(mWeakContext, httpListener, parseMethod(method) + " " + url, params))
+            {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError
+                {
+                    return params != null ? params : super.getParams();
+                }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError
-            {
-                if (header != null)
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError
                 {
-                    return header;
+                    return header != null ? header : super.getHeaders();
                 }
-                else
-                {
-                    return super.getHeaders();
-                }
-            }
-        };
+            };
+        }
 
         if (mStaticHttpListenerAdapter != null)
         {
@@ -164,25 +176,20 @@ public class HttpTool
             httpListener.onStart();
         }
 
-        stringRequest.setShouldCache(false);
-        stringRequest.setRetryPolicy(getRetryPolicy());
-        stringRequest.setTag(getTagFromUrl(url));
+        request.setShouldCache(false);
+        request.setRetryPolicy(getRetryPolicy());
+        request.setTag(getTagFromUrl(url));
         VolleySingleton.getInstance(context)
-                       .addToRequestQueue(stringRequest);
+                       .addToRequestQueue(request);
     }
 
     public static void requestJSONWithFile(final Context context, final String url, final Map<String, String> params, final Map<String, DataPart> fileParams, final HttpListener httpListener)
     {
         final WeakReference<Context> mWeakContext = new WeakReference<>(context);
 
-        final VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, url, new Response.Listener<NetworkResponse>()
-        {
-            @Override
-            public void onResponse(NetworkResponse response)
-            {
-                final String responseStr = new String(response.data);
-                httpToolOnSuccessResponse(mWeakContext, getSuccessLog("POST " + url, params, responseStr), httpListener, responseStr);
-            }
+        final VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, url, response -> {
+            final String responseStr = new String(response.data);
+            httpToolOnSuccessResponse(mWeakContext, getSuccessLog("POST " + url, params, responseStr), httpListener, responseStr);
         }, getErrorListener(mWeakContext, httpListener, "POST " + url, params))
         {
             @Override
@@ -265,15 +272,7 @@ public class HttpTool
 
     private static Response.ErrorListener getErrorListener(final WeakReference<Context> mWeakContext, final HttpListener httpListener, final String url, final Map<String, String> params)
     {
-        return new Response.ErrorListener()
-        {
-
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                httpToolOnErrorResponse(error, mWeakContext, httpListener, url, params);
-            }
-        };
+        return error -> httpToolOnErrorResponse(error, mWeakContext, httpListener, url, params);
     }
 
     private static void httpToolOnErrorResponse(VolleyError error, final WeakReference<Context> mWeakContext, HttpListener httpListener, String url, Map<String, String> params)
@@ -368,5 +367,4 @@ public class HttpTool
                        .getRequestQueue()
                        .cancelAll(tag);
     }
-
 }

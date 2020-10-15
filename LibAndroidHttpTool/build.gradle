@@ -1,19 +1,18 @@
 apply plugin: 'bintray-release'
 apply plugin: 'com.android.library'
 
-def version = "4.0.0"
+def version = "4.0.2"
 
 android {
-	compileSdkVersion 28
-	buildToolsVersion "28.0.3"
+	compileSdkVersion 29
 	flavorDimensions "default"
 
 	useLibrary 'org.apache.http.legacy'
 
 	defaultConfig {
 		minSdkVersion 16
-		targetSdkVersion 28
-		versionCode 3
+		targetSdkVersion 29
+		versionCode 5
 		versionName version
 	}
 	buildTypes {
@@ -25,6 +24,10 @@ android {
 	lintOptions {
 		abortOnError false
 		checkReleaseBuilds false
+	}
+	compileOptions {
+		sourceCompatibility JavaVersion.VERSION_1_8
+		targetCompatibility JavaVersion.VERSION_1_8
 	}
 }
 
