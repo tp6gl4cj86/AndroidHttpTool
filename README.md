@@ -12,7 +12,7 @@ Add dependency.
 
 ```
 dependencies {
-    compile 'tw.com.tp6gl4cj86:android_http_tool:4.0.0'
+    compile 'tw.com.tp6gl4cj86:android_http_tool:4.0.2'
 }
 ```
 
@@ -119,4 +119,9 @@ setRetryPolicy(int initialTimeoutMs, int maxNumRetries, float backoffMultiplier)
 ```java
 HttpTool.cancel(context, tag)
 by getTagFromUrl(url)
+```
+
+# Content-Type application/json
+```java
+HttpTool.setIsApplicationJson(true);
 ```
