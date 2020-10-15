@@ -25,9 +25,20 @@ params.put("key", "value");
 ...
 
 // Request Call Back
-// default response JSONObject
 HttpListenerAdapter httpListener = new HttpListenerAdapter()
 {
+    @Override
+    public void onStart()
+    {
+
+    }
+
+    @Override
+    public void onSuccess(String data, String log)
+    {
+        super.onSuccess(data, log);
+    }
+    
     @Override
     public void onSuccess(JSONObject data, String log) throws JSONException
     {
@@ -38,6 +49,12 @@ HttpListenerAdapter httpListener = new HttpListenerAdapter()
     public void onFailure(int statusCode, String body, String log)
     {
         super.onFailure(errorStr);
+    }
+    
+    @Override
+    public void onFinished()
+    {
+
     }
 };
 
@@ -56,20 +73,9 @@ params.put("key", "value");
 ...
 
 // Request Call Back
-// default response String
 HttpListenerAdapter httpListener = new HttpListenerAdapter()
 {
-    @Override
-    public void onSuccess(JSONObject data, String log) throws JSONException
-    {
-        super.onSuccess(data, log);
-    }
-
-    @Override
-    public void onFailure(int statusCode, String body, String log)
-    {
-        super.onFailure(errorStr);
-    }
+   ...
 };
 
 1. HttpTool.get(activity, url);
@@ -91,26 +97,29 @@ fileParams.put("key", HttpTool.getDataPart(new File("..."), "mimeType"));
 HttpTool.postWithFile(activity, url, params, fileParams, httpListener);
 ```
 
-# Custom Http Request
-```java
-// method
-// Request.Method.GET
-// Request.Method.POST ... other
-
-HttpTool.requestJSON(method, activity, url, params, httpListener)
-```
-
 # DataPart Module
 ```java
 TYPE_IMAGE = "image/jpeg"
 TYPE_THREEGPP = "video/3gpp"
 ```
 
+# Custom Http Request
+```java
+// method
+// Request.Method.GET
+// Request.Method.POST 
+// Request.Method.PUT
+// Request.Method.PATCH
+// Request.Method.DELETE
+
+HttpTool.requestJSON(method, activity, url, params, httpListener)
+```
+
 # RetryPolicy
 ```java
 /// default 
-/// initialTimeoutMs = 10
-/// maxNumRetries = 1
+/// initialTimeoutMs = 10000
+/// maxNumRetries = 0
 /// backoffMultiplier = 1.0f
 setRetryPolicy(int initialTimeoutMs, int maxNumRetries, float backoffMultiplier)
 ```
