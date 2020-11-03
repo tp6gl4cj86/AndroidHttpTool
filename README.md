@@ -12,7 +12,7 @@ Add dependency.
 
 ```
 dependencies {
-    compile 'tw.com.tp6gl4cj86:android_http_tool:4.0.2'
+    compile 'tw.com.tp6gl4cj86:android_http_tool:4.0.3'
 }
 ```
 
@@ -132,5 +132,5 @@ by getTagFromUrl(url)
 
 # Content-Type application/json
 ```java
-HttpTool.setIsApplicationJson(true);
+just put params by JSONObject
 ```
