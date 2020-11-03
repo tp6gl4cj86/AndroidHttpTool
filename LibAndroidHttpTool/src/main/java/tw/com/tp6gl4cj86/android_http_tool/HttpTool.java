@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import tw.com.tp6gl4cj86.android_http_tool.Listener.HttpListener;
@@ -33,13 +34,6 @@ import tw.com.tp6gl4cj86.android_http_tool.Request.VolleyMultipartRequest;
 public class HttpTool
 {
 
-    private static boolean isApplicationJson = false;
-
-    public static void setIsApplicationJson(boolean isApplicationJson)
-    {
-        HttpTool.isApplicationJson = isApplicationJson;
-    }
-
     private static HttpListenerAdapter mStaticHttpListenerAdapter;
 
     public static void setStaticHttpListenerAdapter(HttpListenerAdapter mStaticHttpListenerAdapter)
@@ -52,7 +46,7 @@ public class HttpTool
         post(context, url, new HashMap<>(), null);
     }
 
-    public static void post(Context context, String url, Map<String, String> params)
+    public static void post(Context context, String url, Object params)
     {
         post(context, url, params, null);
     }
@@ -62,12 +56,12 @@ public class HttpTool
         post(context, url, new HashMap<>(), httpListener);
     }
 
-    public static void post(Context context, String url, Map<String, String> params, HttpListener httpListener)
+    public static void post(Context context, String url, Object params, HttpListener httpListener)
     {
         requestJSON(Request.Method.POST, context, url, params, httpListener);
     }
 
-    public static void post(Context context, String url, Map<String, String> header, Map<String, String> params, HttpListener httpListener)
+    public static void post(Context context, String url, Map<String, String> header, Object params, HttpListener httpListener)
     {
         requestJSON(Request.Method.POST, context, url, header, params, httpListener);
     }
@@ -107,12 +101,12 @@ public class HttpTool
         requestJSON(Request.Method.GET, context, url, null, httpListener);
     }
 
-    public static void requestJSON(final int method, final Context context, final String url, final Map<String, String> params, final HttpListener httpListener)
+    public static void requestJSON(final int method, final Context context, final String url, final Object params, final HttpListener httpListener)
     {
         requestJSON(method, context, url, new HashMap<>(), params, httpListener);
     }
 
-    private static void requestJSON(final int method, Context context, final String url, final Map<String, String> header, final Map<String, String> params, final HttpListener httpListener)
+    private static void requestJSON(final int method, Context context, final String url, final Map<String, String> header, Object params, final HttpListener httpListener)
     {
         //        final UTF8_JsonObjectRequest jsonObjectRequest = new UTF8_JsonObjectRequest(method, url, new JSONObject(params), new Response.Listener<JSONObject>()
         //        {
@@ -130,33 +124,37 @@ public class HttpTool
         final WeakReference<Context> mWeakContext = new WeakReference<>(context);
 
         final Request request;
-        if (isApplicationJson)
+        if (params instanceof JSONObject)
         {
-            final JSONObject paramsJson = new JSONObject();
-            if (params != null)
+            final JSONObject paramsJson = ((JSONObject) params);
+            final Map<String, String> apiParams = new HashMap<>();
+            final Iterator<String> keys = paramsJson.keys();
+            while (keys.hasNext())
             {
-                for (Map.Entry<String, String> stringStringEntry : params.entrySet())
-                {
-                    try
-                    {
-                        paramsJson.put(stringStringEntry.getKey(), stringStringEntry.getValue());
-                    }
-                    catch (JSONException e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
+                final String key = keys.next();
+                apiParams.put(key, ((JSONObject) params).optString("key"));
             }
-            request = new JsonObjectRequest(method, url, paramsJson, response -> httpToolOnSuccessResponse(mWeakContext, getSuccessLog(parseMethod(method) + " " + url, params, response.toString()), httpListener, response.toString()), getErrorListener(mWeakContext, httpListener, parseMethod(method) + " " + url, params));
+
+            request = new JsonObjectRequest(method, url, paramsJson, response -> httpToolOnSuccessResponse(mWeakContext, getSuccessLog(parseMethod(method) + " " + url, apiParams, response.toString()), httpListener, response.toString()), getErrorListener(mWeakContext, httpListener, parseMethod(method) + " " + url, apiParams));
         }
         else
         {
-            request = new StringRequest(method, url, response -> httpToolOnSuccessResponse(mWeakContext, getSuccessLog(parseMethod(method) + " " + url, params, response), httpListener, response), getErrorListener(mWeakContext, httpListener, parseMethod(method) + " " + url, params))
+            final Map<String, String> apiParams;
+            if (params instanceof Map)
+            {
+                apiParams = (Map<String, String>) params;
+            }
+            else
+            {
+                apiParams = new HashMap<>();
+            }
+
+            request = new StringRequest(method, url, response -> httpToolOnSuccessResponse(mWeakContext, getSuccessLog(parseMethod(method) + " " + url, apiParams, response), httpListener, response), getErrorListener(mWeakContext, httpListener, parseMethod(method) + " " + url, apiParams))
             {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError
                 {
-                    return params != null ? params : super.getParams();
+                    return params != null ? apiParams : super.getParams();
                 }
 
                 @Override
