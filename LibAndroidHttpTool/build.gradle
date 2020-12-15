@@ -1,18 +1,18 @@
 apply plugin: 'bintray-release'
 apply plugin: 'com.android.library'
 
-def version = "4.0.4"
+def version = "5.0.0"
 
 android {
-	compileSdkVersion 29
+	compileSdkVersion 30
 	flavorDimensions "default"
 
 	useLibrary 'org.apache.http.legacy'
 
 	defaultConfig {
-		minSdkVersion 16
-		targetSdkVersion 29
-		versionCode 6
+		minSdkVersion 21
+		targetSdkVersion 30
+		versionCode 7
 		versionName version
 	}
 	buildTypes {
@@ -34,8 +34,8 @@ android {
 dependencies {
 	api fileTree(include: ['*.jar'], dir: 'libs')
 	api 'com.android.volley:volley:1.1.1'
-	api 'com.squareup.okhttp3:okhttp:3.13.1'
-	api 'commons-io:commons-io:2.4'
+	api 'com.squareup.okhttp3:okhttp:4.9.0'
+	api 'commons-io:commons-io:2.6'
 }
 
 publish {
