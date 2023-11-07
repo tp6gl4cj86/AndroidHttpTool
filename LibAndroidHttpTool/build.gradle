@@ -36,16 +36,16 @@ dependencies {
 	api 'commons-io:commons-io:2.6'
 }
 
-//afterEvaluate {
-//	publishing {
-//		publications {
-//			release(MavenPublication) {
-//				from components.release
-//
-//				groupId = 'tw.com.tp6gl4cj86'
-//				artifactId = 'android_http_tool'
-//				version = versionStr
-//			}
-//		}
-//	}
-//}
+afterEvaluate {
+	publishing {
+		publications {
+			release(MavenPublication) {
+				from components.findByName('release')
+
+				groupId = 'tw.com.tp6gl4cj86'
+				artifactId = 'android_http_tool'
+				version = versionStr
+			}
+		}
+	}
+}

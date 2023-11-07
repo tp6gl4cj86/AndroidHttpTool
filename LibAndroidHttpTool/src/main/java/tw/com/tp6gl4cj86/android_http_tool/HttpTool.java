@@ -106,7 +106,7 @@ public class HttpTool
         requestJSON(method, context, url, new HashMap<>(), params, httpListener);
     }
 
-    private static void requestJSON(final int method, Context context, final String url, final Map<String, String> header, Object params, final HttpListener httpListener)
+    public static void requestJSON(final int method, Context context, final String url, final Map<String, String> header, Object params, final HttpListener httpListener)
     {
         //        final UTF8_JsonObjectRequest jsonObjectRequest = new UTF8_JsonObjectRequest(method, url, new JSONObject(params), new Response.Listener<JSONObject>()
         //        {
@@ -135,7 +135,14 @@ public class HttpTool
                 apiParams.put(key, ((JSONObject) params).optString(key));
             }
 
-            request = new JsonObjectRequest(method, url, paramsJson, response -> httpToolOnSuccessResponse(mWeakContext, getSuccessLog(parseMethod(method) + " " + url, apiParams, response.toString()), httpListener, response.toString()), getErrorListener(mWeakContext, httpListener, parseMethod(method) + " " + url, apiParams));
+            request = new JsonObjectRequest(method, url, paramsJson, response -> httpToolOnSuccessResponse(mWeakContext, getSuccessLog(parseMethod(method) + " " + url, apiParams, response.toString()), httpListener, response.toString()), getErrorListener(mWeakContext, httpListener, parseMethod(method) + " " + url, apiParams))
+            {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError
+                {
+                    return header != null ? header : super.getHeaders();
+                }
+            };
         }
         else
         {
