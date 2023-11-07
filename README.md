@@ -8,13 +8,7 @@ Http Request Tool use <a href="https://developer.android.com/training/volley/ind
 
 # Usage
 
-Add dependency.
-
-```
-dependencies {
-    compile 'tw.com.tp6gl4cj86:android_http_tool:5.0.0'
-}
-```
+https://jitpack.io/#tp6gl4cj86/AndroidHttpTool
 
 # Http Post func
 
