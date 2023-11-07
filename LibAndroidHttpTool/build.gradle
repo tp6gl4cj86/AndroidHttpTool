@@ -1,19 +1,21 @@
-apply plugin: 'bintray-release'
-apply plugin: 'com.android.library'
+plugins {
+	id 'com.android.library'
+	id 'maven-publish'
+}
 
-def version = "5.0.0"
+def versionStr = "5.0.1"
 
 android {
-	compileSdkVersion 30
-	flavorDimensions "default"
+	namespace = 'tw.com.tp6gl4cj86.android_http_tool'
+	compileSdk 33
 
 	useLibrary 'org.apache.http.legacy'
 
 	defaultConfig {
-		minSdkVersion 21
-		targetSdkVersion 30
-		versionCode 7
-		versionName version
+		minSdk 19
+		targetSdk 33
+		versionCode 8
+		versionName versionStr
 	}
 	buildTypes {
 		release {
@@ -21,36 +23,29 @@ android {
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 		}
 	}
-	lintOptions {
-		abortOnError false
-		checkReleaseBuilds false
-	}
 	compileOptions {
-		sourceCompatibility JavaVersion.VERSION_1_8
-		targetCompatibility JavaVersion.VERSION_1_8
+		sourceCompatibility JavaVersion.VERSION_17
+		targetCompatibility JavaVersion.VERSION_17
 	}
 }
 
 dependencies {
 	api fileTree(include: ['*.jar'], dir: 'libs')
-	api 'com.android.volley:volley:1.1.1'
+	api 'com.android.volley:volley:1.2.1'
 	api 'com.squareup.okhttp3:okhttp:4.9.0'
 	api 'commons-io:commons-io:2.6'
 }
 
-publish {
-	userOrg = 'tp6gl4cj86'
-	groupId = 'tw.com.tp6gl4cj86'
-	artifactId = 'android_http_tool'
-	publishVersion = version
-	desc = 'AndroidHttpTool'
-	website = 'https://github.com/tp6gl4cj86/AndroidHttpTool'
-}
-
-ext {
-	PUBLISH_GROUP_ID = 'tw.com.tp6gl4cj86'
-	PUBLISH_ARTIFACT_ID = 'android_http_tool'
-	PUBLISH_VERSION = version
-}
-
-apply from: 'https://raw.githubusercontent.com/blundell/release-android-library/master/android-release-aar.gradle'
+//afterEvaluate {
+//	publishing {
+//		publications {
+//			release(MavenPublication) {
+//				from components.release
+//
+//				groupId = 'tw.com.tp6gl4cj86'
+//				artifactId = 'android_http_tool'
+//				version = versionStr
+//			}
+//		}
+//	}
+//}

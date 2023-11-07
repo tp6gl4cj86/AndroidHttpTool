@@ -1,5 +1,4 @@
-<manifest package="tw.com.tp6gl4cj86.android_http_tool"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
