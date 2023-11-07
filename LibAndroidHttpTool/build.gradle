@@ -1,5 +1,6 @@
 plugins {
 	id 'com.android.library'
+	id 'kotlin-android'
 	id 'maven-publish'
 }
 
@@ -40,7 +41,7 @@ afterEvaluate {
 	publishing {
 		publications {
 			release(MavenPublication) {
-				from components.findByName('release')
+				from components.release
 
 				groupId = 'tw.com.tp6gl4cj86'
 				artifactId = 'android_http_tool'
