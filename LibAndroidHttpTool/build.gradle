@@ -4,18 +4,18 @@ plugins {
 	id 'maven-publish'
 }
 
-def versionStr = "5.0.3"
+def versionStr = "5.0.4"
 
 android {
 	namespace = 'tw.com.tp6gl4cj86.android_http_tool'
-	compileSdk 33
 
 	useLibrary 'org.apache.http.legacy'
 
 	defaultConfig {
 		minSdk 19
-		targetSdk 33
-		versionCode 9
+		targetSdk 34
+		compileSdk 34
+		versionCode 10
 		versionName versionStr
 	}
 	buildTypes {

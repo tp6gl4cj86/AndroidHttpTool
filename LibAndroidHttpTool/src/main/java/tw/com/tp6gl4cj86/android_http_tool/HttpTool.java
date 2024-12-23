@@ -152,19 +152,7 @@ public class HttpTool
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError
                 {
-                    if (!userAgent.isEmpty())
-                    {
-                        if (header != null)
-                        {
-                            header.put("User-Agent", userAgent);
-                        }
-                        else if (super.getHeaders() != null)
-                        {
-                            super.getHeaders()
-                                 .put("User-Agent", userAgent);
-                        }
-                    }
-                    return header != null ? header : super.getHeaders();
+                    return getHeader(super.getHeaders(), header);
                 }
             };
         }
@@ -191,19 +179,7 @@ public class HttpTool
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError
                 {
-                    if (!userAgent.isEmpty())
-                    {
-                        if (header != null)
-                        {
-                            header.put("User-Agent", userAgent);
-                        }
-                        else if (super.getHeaders() != null)
-                        {
-                            super.getHeaders()
-                                 .put("User-Agent", userAgent);
-                        }
-                    }
-                    return header != null ? header : super.getHeaders();
+                    return getHeader(super.getHeaders(), header);
                 }
             };
         }
@@ -248,15 +224,7 @@ public class HttpTool
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError
             {
-                if (!userAgent.isEmpty())
-                {
-                    if (super.getHeaders() != null)
-                    {
-                        super.getHeaders()
-                             .put("User-Agent", userAgent);
-                    }
-                }
-                return super.getHeaders();
+                return getHeader(super.getHeaders(), null);
             }
         };
 
@@ -421,6 +389,24 @@ public class HttpTool
         VolleySingleton.getInstance(context)
                        .getRequestQueue()
                        .cancelAll(tag);
+    }
+
+    private static Map<String, String> getHeader(Map<String, String> superHeader, Map<String, String> header)
+    {
+        Map<String, String> headers = new HashMap<>();
+        if (superHeader != null)
+        {
+            headers.putAll(superHeader);
+        }
+        if (header != null)
+        {
+            headers.putAll(header);
+        }
+        if (!userAgent.isEmpty())
+        {
+            headers.put("User-Agent", userAgent);
+        }
+        return headers;
     }
 
     private static String getUserAgent(Context context, String appName)
