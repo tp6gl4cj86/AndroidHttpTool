@@ -4,7 +4,7 @@ plugins {
 	id 'maven-publish'
 }
 
-def versionStr = "5.0.1"
+def versionStr = "5.0.2"
 
 android {
 	namespace = 'tw.com.tp6gl4cj86.android_http_tool'
