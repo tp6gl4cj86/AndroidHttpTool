@@ -2,6 +2,7 @@ package tw.com.tp6gl4cj86.android_http_tool;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -35,6 +36,17 @@ public class HttpTool
 {
 
     private static HttpListenerAdapter mStaticHttpListenerAdapter;
+    private static String              userAgent = "";
+
+    public static void initUserAgent(Context context, String appName)
+    {
+        HttpTool.userAgent = getUserAgent(context, appName);
+    }
+
+    public static void setUserAgent(String userAgent)
+    {
+        HttpTool.userAgent = userAgent;
+    }
 
     public static void setStaticHttpListenerAdapter(HttpListenerAdapter mStaticHttpListenerAdapter)
     {
@@ -140,6 +152,18 @@ public class HttpTool
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError
                 {
+                    if (!userAgent.isEmpty())
+                    {
+                        if (header != null)
+                        {
+                            header.put("User-Agent", userAgent);
+                        }
+                        else if (super.getHeaders() != null)
+                        {
+                            super.getHeaders()
+                                 .put("User-Agent", userAgent);
+                        }
+                    }
                     return header != null ? header : super.getHeaders();
                 }
             };
@@ -167,6 +191,18 @@ public class HttpTool
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError
                 {
+                    if (!userAgent.isEmpty())
+                    {
+                        if (header != null)
+                        {
+                            header.put("User-Agent", userAgent);
+                        }
+                        else if (super.getHeaders() != null)
+                        {
+                            super.getHeaders()
+                                 .put("User-Agent", userAgent);
+                        }
+                    }
                     return header != null ? header : super.getHeaders();
                 }
             };
@@ -207,6 +243,20 @@ public class HttpTool
             protected Map<String, DataPart> getByteData()
             {
                 return fileParams;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError
+            {
+                if (!userAgent.isEmpty())
+                {
+                    if (super.getHeaders() != null)
+                    {
+                        super.getHeaders()
+                             .put("User-Agent", userAgent);
+                    }
+                }
+                return super.getHeaders();
             }
         };
 
@@ -371,5 +421,23 @@ public class HttpTool
         VolleySingleton.getInstance(context)
                        .getRequestQueue()
                        .cancelAll(tag);
+    }
+
+    private static String getUserAgent(Context context, String appName)
+    {
+        String appVersion = "";
+        try
+        {
+            appVersion = context.getPackageManager()
+                                .getPackageInfo(context.getPackageName(), 0).versionName; // 應用版本
+        }
+        catch (Exception ignore) {}
+
+        final String osVersion = Build.VERSION.RELEASE; // 系統版本
+        final int sdkVersion = Build.VERSION.SDK_INT; // SDK 版本
+        final String deviceModel = Build.MODEL; // 裝置型號
+        final String manufacturer = Build.MANUFACTURER; // 製造商
+
+        return appName + " " + appVersion + " (Android " + osVersion + "; SDK " + sdkVersion + "; " + manufacturer + " " + deviceModel + ")";
     }
 }
