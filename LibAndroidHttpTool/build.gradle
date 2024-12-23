@@ -4,7 +4,7 @@ plugins {
 	id 'maven-publish'
 }
 
-def versionStr = "5.0.2"
+def versionStr = "5.0.3"
 
 android {
 	namespace = 'tw.com.tp6gl4cj86.android_http_tool'
@@ -15,7 +15,7 @@ android {
 	defaultConfig {
 		minSdk 19
 		targetSdk 33
-		versionCode 8
+		versionCode 9
 		versionName versionStr
 	}
 	buildTypes {
@@ -24,10 +24,10 @@ android {
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 		}
 	}
-	compileOptions {
-		sourceCompatibility JavaVersion.VERSION_17
-		targetCompatibility JavaVersion.VERSION_17
-	}
+//	compileOptions {
+//		sourceCompatibility JavaVersion.VERSION_17
+//		targetCompatibility JavaVersion.VERSION_17
+//	}
 }
 
 dependencies {
